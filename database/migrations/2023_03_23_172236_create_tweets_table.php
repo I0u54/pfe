@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tweets', function (Blueprint $table) {
             $table->id('idTweet');
             $table->unsignedBigInteger('idUser');
-            $table->foreign('idUser')->references('idUser')->on('users')->onDelete('cascade');
+            $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
             $table->longText('description')->default(null);
             $table->string('image')->default(null);
             $table->string('video')->default(null);

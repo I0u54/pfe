@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('extar_users', function (Blueprint $table) {
+        Schema::create('email_verifications', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idUser');
-            $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
-            $table->string('bio');
-            $table->string('adresse');
+            $table->string('email')->unique();
+            $table->string('token');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('extar_users');
+        Schema::dropIfExists('email_verifications');
     }
 };

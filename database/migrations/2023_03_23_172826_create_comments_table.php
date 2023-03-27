@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('idComment');
            
             $table->unsignedBigInteger('idUser');
-            $table->foreign('idUser')->references('idUser')->on('users')->onDelete('cascade');
+            $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('idTweet');
             $table->foreign('idTweet')->references('idTweet')->on('tweets')->onDelete('cascade');
             $table->longText('body');

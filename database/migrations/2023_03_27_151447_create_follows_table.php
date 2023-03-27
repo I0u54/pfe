@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('extar_users', function (Blueprint $table) {
+        Schema::create('follows', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('idUser');
-            $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
-            $table->string('bio');
-            $table->string('adresse');
+            $table->unsignedBigInteger('idFollower');
+            $table->foreign('idFollower')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('idFollowing');
+            $table->foreign('idFollowing')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('extar_users');
+        Schema::dropIfExists('follows');
     }
 };
