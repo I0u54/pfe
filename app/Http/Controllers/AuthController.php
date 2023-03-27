@@ -20,133 +20,123 @@ use Illuminate\Support\Facades\Mail;
 class AuthController extends Controller
 {
     use HttpResponses;
-    public function verifyEmail(StoreEmailRequest $request){
+    public function verifyEmail(StoreEmailRequest $request)
+    {
         $request->validated($request->all());
-        $token = rand(100000,999999);
-        $user = User::where('email',$request->email)->first();
-        if($user){
-            return $this->error([],'user already exist',403);
+        $token = rand(100000, 999999);
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            return $this->error([], 'user already exist', 403);
         }
 
-        if(!EmailVerification::where('email','=',$request->email)->first()){
-          
+        if (!EmailVerification::where('email', '=', $request->email)->first()) {
+
             EmailVerification::create([
-                            'email'=>$request->email,
-                            'token'=>$token
-                        ]);
-        }else{
-            EmailVerification::where('email',$request->email)->update([
-                'token'=>$token
+                'email' => $request->email,
+                'token' => $token
+            ]);
+        } else {
+            EmailVerification::where('email', $request->email)->update([
+                'token' => $token
 
             ]);
         }
-        Mail::to($request->email)->send(new verifyEmail($token)); 
-        
-       
-       return $this->success([],'token has been sent to your email');
+        Mail::to($request->email)->send(new verifyEmail($token));
+
+
+        return $this->success([], 'token has been sent to your email');
     }
 
-    public function register(StoreUserRequest $request){
+    public function register(StoreUserRequest $request)
+    {
         $request->validated($request->all());
-        $token = EmailVerification::where('email',$request->email)->select('token')->first();
-        if(!$token || $token->token != $request->token){
-            return $this->error([],'token mismatch',403);
+        $token = EmailVerification::where('email', $request->email)->select('token')->first();
+        if (!$token || $token->token != $request->token) {
+            return $this->error([], 'token mismatch', 403);
         }
         $data = User::create([
-            'name'=>$request->name,
-            'birthDay'=>$request->birthDay,
-            'email'=>$request->email,
-            'password'=>Hash::make($request->password) 
+            'name' => $request->name,
+            'birthDay' => $request->birthDay,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
         ]);
-      
-       $data = User::where('id',$data->id)->first();
-        EmailVerification::where('email',$request->email)->delete(); 
 
-       return $this->success([
-            'user'=>$data,
-            'token'=>$data->createToken('API token for'.$data->name)->plainTextToken
-        ],'user stored with success');
+        $data = User::where('id', $data->id)->first();
+        EmailVerification::where('email', $request->email)->delete();
 
-        
-        
+        return $this->success([
+            'user' => $data,
+            'token' => $data->createToken('API token for' . $data->name)->plainTextToken
+        ], 'user stored with success');
     }
-    public function login(StoreLoginRequest $request){
+    public function login(StoreLoginRequest $request)
+    {
         $request->validated($request->all());
-        $user = User::where('email',$request->email)->first();
-        if($user){
-            if(Hash::check($request->password,$user->password)){
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            if (Hash::check($request->password, $user->password)) {
                 return $this->success([
-                    'user'=>$user,
-                    'token'=>$user->createToken('API token for'.$user->name)->plainTextToken
-                ],'user logged in with success');
-
-            }else{
-                return $this->error([],'data mismatch',403);
+                    'user' => $user,
+                    'token' => $user->createToken('API token for' . $user->name)->plainTextToken
+                ], 'user logged in with success');
+            } else {
+                return $this->error([], 'data mismatch', 403);
             }
-
-        }else{
-            return $this->error([],'data mismatch',403);
-
+        } else {
+            return $this->error([], 'data mismatch', 403);
         }
-
-
     }
-    public function logout(){
+    public function logout()
+    {
         Auth::user()->currentAccessToken()->delete();
-        return $this->success([],'you have successfully logged out ');
-    } 
-    public function forget(StoreEmailRequest $request){
+        return $this->success([], 'you have successfully logged out ');
+    }
+    public function forget(StoreEmailRequest $request)
+    {
         $request->validated($request->all());
-        $user = User::where('email',$request->email)->first();
-        if(!$user){
-            return $this->error([],'user not found ',404);
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return $this->error([], 'user not found ', 404);
         }
-        $token = rand(100000,999999);
-       
-        if(PasswordResetToken::where('email',$request->email)->first()){
-            PasswordResetToken::where('email',$request->email)->update([
-                'token'=>$token
+        $token = rand(100000, 999999);
+
+        if (PasswordResetToken::where('email', $request->email)->first()) {
+            PasswordResetToken::where('email', $request->email)->update([
+                'token' => $token
             ]);
-        
-    }else{
-        PasswordResetToken::create([
-            'email'=>$request->email,
-            'token'=>$token
-        ]);
-    }
-    Mail::to($request->email)->send(new verifyEmail($token)); 
-    return $this->success([],'token has been sent to your email');
-
-
-    }
-    public function reset(StorePasswordReset $request){
-        $user = User::where('email',$request->email)->first();
-        if(!$user){
-            return $this->error([],'user not found ',404);
+        } else {
+            PasswordResetToken::create([
+                'email' => $request->email,
+                'token' => $token
+            ]);
         }
-        $token = PasswordResetToken::where('email',$request->email)->first();
-        if(!$token || $token->token != $request->token){
-            return $this->error([],'token mismatch',404);
+        Mail::to($request->email)->send(new verifyEmail($token));
+        return $this->success([], 'token has been sent to your email');
+    }
+    public function reset(StorePasswordReset $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return $this->error([], 'user not found ', 404);
+        }
+        $token = PasswordResetToken::where('email', $request->email)->first();
+        if (!$token || $token->token != $request->token) {
+            return $this->error([], 'token mismatch', 404);
         }
 
-        if($request->password == $request->passwordConfirmation){
+        if ($request->password == $request->passwordConfirmation) {
             $user->fill([
-                'password'=>Hash::make($request->password)
+                'password' => Hash::make($request->password)
             ]);
             $user->save();
             $user->tokens()->delete();
-            PasswordResetToken::where('email',$request->email)->delete();
+            PasswordResetToken::where('email', $request->email)->delete();
             return $this->success([
-                'user'=>$user,
-                'token'=>$user->createToken('API token for'.$user->name)->plainTextToken
-            ],'password have been changed');
-    
-        
-        }else{
-            return $this->error([],'password do not match',403);
+                'user' => $user,
+                'token' => $user->createToken('API token for' . $user->name)->plainTextToken
+            ], 'password have been changed');
+        } else {
+            return $this->error([], 'password do not match', 403);
         }
-
-
     }
 }
-
