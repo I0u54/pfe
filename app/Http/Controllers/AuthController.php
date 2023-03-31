@@ -11,6 +11,7 @@ use App\Models\EmailVerification;
 use App\Models\PasswordResetToken;
 use App\Models\User;
 use App\Traits\HttpResponses;
+use Illuminate\Support\Str;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -58,9 +59,14 @@ class AuthController extends Controller
             'name' => $request->name,
             'birthDay' => $request->birthDay,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            
         ]);
-
+        
+        
+        
+        $data->pseudo='@'.Str::slug($data->name).$data->id;
+        $data->save();
         $data = User::where('id', $data->id)->first();
         EmailVerification::where('email', $request->email)->delete();
 
