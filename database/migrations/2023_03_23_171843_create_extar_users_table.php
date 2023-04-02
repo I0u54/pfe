@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
             $table->string('bio');
             $table->string('adresse');
+            $table->string('pp');
+            $table->string('cover');
             $table->timestamps();
         });
     }

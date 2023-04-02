@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfilController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,6 @@ Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/forget',[AuthController::class,'forget']);
 Route::post('/reset',[AuthController::class,'reset']);
+Route::get('profil/{slug}',[ProfilController::class,'index']);
+Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
 
