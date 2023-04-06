@@ -19,21 +19,18 @@ class ProfilController extends Controller
     use HttpResponses;
     public function index($slug){
 
-        $user =User::where('pseudo' , $slug)->first();
+        if(!User::where('pseudo',$slug)->first()){
+            return $this->error([],'user not found',404);
+        }
+        $user=User::where('pseudo',$slug)->leftJoin('extar_users','users.id','=','extar_users.idUser')->select('users.id','name','email','pseudo','birthday','users.created_at','bio','adresse','pp','cover')->first();
+        $following = Follow::where('users.pseudo',$slug)->leftJoin('users','users.id','=','follows.idFollower')->select(DB::raw('count(follows.id) as following'))->get();
+        $followers = Follow::where('users.pseudo',$slug)->leftJoin('users','users.id','=','follows.idFollowing')->select(DB::raw('count(follows.id) as followers' ))->get();
+        return $this->success([
 
-        if(is_null($user)) :
-
-           return $this->error([] , "user doesn't exist" ,404);
-
-        endif ;
-        
-        $data = User::where('pseudo' , $slug)
-        ->with('extra_user')
-        ->with(['follows' => function (Builder $query) {
-            $query->with('following')->with('follower')->get() ;
-        }])->first() ;
-
-        return $this->success(RcProfile::collection([$data]) , "this is profile user for  {$user->name} ");
+            'user'=>$user,
+            'following'=>$following[0]->following,
+            'followers'=>$followers[0]->followers
+        ],'user shiped');
 
     }
     public function getTweets($slug){

@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     public function follows()
     {
-        return $this->hasMany(Follow::class , 'idUser');
+        return $this->hasMany(Follow::class , 'idUser')->orderBy('created_at' , 'desc');
     }
 
     public function like()
