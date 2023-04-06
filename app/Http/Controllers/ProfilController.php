@@ -18,7 +18,6 @@ class ProfilController extends Controller
 {
     use HttpResponses;
     public function index($slug){
-
         if(!User::where('pseudo',$slug)->first()){
             return $this->error([],'user not found',404);
         }
