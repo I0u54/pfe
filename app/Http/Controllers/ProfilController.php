@@ -8,7 +8,8 @@ use App\Models\User;
 use App\Traits\HttpResponses;
 use App\Http\Resources\profile\Profile as RcProfile ;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use App\Http\Resources\profile\Follows as RcFollows;
+use App\Http\Resources\profile\Follower as RcFollower;
+use App\Http\Resources\profile\Following as RcFollowing;
 use App\Http\Resources\profile\Likes as RcLikes ;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -110,7 +111,9 @@ class ProfilController extends Controller
             }]) ;
         }])->first() ;
 
-        return $this->success(RcFollows::collection($data->follows) , "this is follower user for  {$user->name} ");
+    
+
+        return $this->success(RcFollower::collection($data->follows) , "this is follower user for  {$user->name} ");
 
     }
 
@@ -131,7 +134,9 @@ class ProfilController extends Controller
             }]) ;
         }])->first() ;
 
-        return $this->success(RcFollows::collection($data->follows) , "this is following user for  {$user->name} ");
+       
+        
+        return $this->success(RcFollowing::collection($data->follows) , "this is following user for  {$user->name} ");
 
     }
 }

@@ -1,12 +1,11 @@
 <?php
 
-
 namespace App\Http\Resources\profile;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Follows extends JsonResource
+class Following extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,11 +17,12 @@ class Follows extends JsonResource
         // return parent::toArray($request);
 
         return [
-            'idUser' => $this->follower->id ,
-            'name' => $this->follower->name ,
-            'email' => $this->follower->email ,
-            'pseudo'=> $this->follower->pseudo  ,
-            'image' =>  $this->follower->extra_user->pp ?? null 
+            'idUser' => $this->following->id ,
+            'name' => $this->following->name ,
+            'email' => $this->following->email ,
+            'pseudo'=> $this->following->pseudo  ,
+            'image' =>  $this->following->extra_user->pp ?? null  ,
+        
         ];
     }
 }
