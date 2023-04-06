@@ -21,7 +21,6 @@ class Follower extends JsonResource
             return [
                 'idUser' => $this->follower->id ,
                 'name' => $this->follower->name ,
-                'email' => $this->follower->email ,
                 'pseudo'=> $this->follower->pseudo  ,
                 'image' =>  $this->follower->extra_user->pp ?? null  ,
     

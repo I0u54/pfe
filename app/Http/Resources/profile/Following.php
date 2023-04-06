@@ -19,7 +19,6 @@ class Following extends JsonResource
         return [
             'idUser' => $this->following->id ,
             'name' => $this->following->name ,
-            'email' => $this->following->email ,
             'pseudo'=> $this->following->pseudo  ,
             'image' =>  $this->following->extra_user->pp ?? null  ,
         
