@@ -6,7 +6,6 @@ use App\Models\Follow;
 use App\Models\Tweet;
 use App\Models\User;
 use App\Traits\HttpResponses;
-use App\Http\Resources\profile\Profile as RcProfile ;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Http\Resources\profile\Follower as RcFollower;
 use App\Http\Resources\profile\Following as RcFollowing;
@@ -106,17 +105,11 @@ class ProfilController extends Controller
            return $this->error([] , "user doesn't exist" ,404);
 
         endif ;
-        
+
         $data = User::where('pseudo' , $slug)
-        ->with(['follows' => function (Builder $query) {
-            $query->with(['follower' => function(Builder $query){
-                $query->with('extra_user')->get();
-            }]) ;
-        }])->first() ;
+        ->with('user_follower.follower.extra_user')->first();
 
-    
-
-        return $this->success(RcFollower::collection($data->follows) , "this is follower user for  {$user->name} ");
+        return $this->success(RcFollower::collection($data->user_follower) , "this is follower user for  {$user->name} ");
 
     }
 
@@ -130,16 +123,10 @@ class ProfilController extends Controller
 
         endif ;
         
-        $data = User::where('pseudo' , $slug)
-        ->with(['follows' => function (Builder $query) {
-            $query->with(['following' => function(Builder $query){
-                $query->with('extra_user')->get();
-            }]) ;
-        }])->first() ;
-
-       
+         $data = User::where('pseudo' , $slug)
+        ->with('user_following.following.extra_user')->first();
         
-        return $this->success(RcFollowing::collection($data->follows) , "this is following user for  {$user->name} ");
+        return $this->success(RcFollowing::collection($data->user_following) , "this is following user for  {$user->name} ");
 
     }
 }

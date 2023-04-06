@@ -50,14 +50,19 @@ class User extends Authenticatable
         return $this->hasOne(Extar_user::class , 'idUser');
     }
 
-    public function follows()
+    public function user_follower()
     {
-        return $this->hasMany(Follow::class , 'idUser')->orderBy('created_at' , 'desc');
+        return $this->hasMany(Follow::class , 'idFollowing' )->orderBy('created_at' , 'asc');
+    }
+
+    public function user_following()
+    {
+        return $this->hasMany(Follow::class , 'idFollower')->orderBy('created_at' , 'asc');
     }
 
     public function like()
     {
-        return $this->hasMany(Like::class , 'idUser')->orderBy('created_at' , 'desc');
+        return $this->hasMany(Like::class , 'idUser')->orderBy('created_at' , 'asc');
     }
 
 }
