@@ -27,6 +27,11 @@ Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/forget',[AuthController::class,'forget']);
 Route::post('/reset',[AuthController::class,'reset']);
-Route::get('profil/{slug}',[ProfilController::class,'index']);
+
+
+Route::get('profile/{slug}',[ProfilController::class,'index']);
 Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
+Route::get('likes/{slug}',[ProfilController::class,'likes']);
+Route::get('follower/{slug}',[ProfilController::class,'follower']);
+Route::get('following/{slug}',[ProfilController::class,'following']);
 

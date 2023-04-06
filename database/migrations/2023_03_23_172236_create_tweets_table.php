@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tweets', function (Blueprint $table) {
-            $table->id('idTweet');
+            $table->id();
             $table->unsignedBigInteger('idUser');
             $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
             $table->longText('description')->default(null);
