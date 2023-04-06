@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('idUser');
             $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
             $table->longText('description')->default(null);
-            $table->string('image')->default(null);
-            $table->string('video')->default(null);
+            $table->string('image')->nullable()->default(null);
+            $table->string('video')->nullable()->default(null);
             $table->timestamps();
         });
     }

@@ -38,34 +38,37 @@ class ProfilController extends Controller
             return $this->error([],'user not found',404);
         }
         $tweets = Tweet::where('users.pseudo',$slug)
-        ->select('tweets.idUser','tweets.id','description','image','video','tweets.created_at','tweets.updated_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
+        ->select('tweets.idUser','tweets.id','description','image','video','tweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
         ->leftJoin('likes','likes.idTweet','=','tweets.id')
         ->leftJoin('comments','comments.idTweet','=','tweets.id')
         ->join('users','users.id','=','tweets.idUser')
         ->leftJoin('extar_users','extar_users.idUser','=','users.id')
-        ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'tweets.updated_at', 'name', 'pseudo', 'email','pp')
+        ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'name', 'pseudo', 'email','pp')
         ->orderBy('tweets.created_at','desc')
         ->get();
     
 
         $retweets = Tweet::where('retweets.idUser',$slug[strlen($slug)-1])
         ->join('retweets','retweets.idTweet','=','tweets.id')
-        ->select('tweets.idUser','retweets.idUser as orginaUserId','tweets.id','description','image','video','retweets.created_at','tweets.updated_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
+        ->select('tweets.idUser','retweets.idUser as orginaUserId','tweets.id','description','image','video','retweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
         ->join('users','users.id','=','tweets.idUser')
         ->leftJoin('likes','likes.idTweet','=','tweets.id')
         ->leftJoin('comments','comments.idTweet','=','tweets.id')
         ->leftJoin('extar_users','extar_users.idUser','=','users.id')
      
-        ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'retweets.created_at', 'tweets.updated_at', 'name', 'pseudo', 'email','pp','retweets.idUser')
+        ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'retweets.created_at', 'name', 'pseudo', 'email','pp','retweets.idUser')
         ->orderBy('tweets.created_at','desc')
         ->get();
+        $allTweets = $tweets->merge($retweets);
+
+        $sortedTweets = $allTweets->sortByDesc('created_at');
         return $this->success([
-            'tweets'=>$tweets,
-            'retweets'=>$retweets
+            'tweets'=>$sortedTweets,
+            
 
             
         ],'tweets shiped');
-
+        
     }
 
     // public function likes($slug)
