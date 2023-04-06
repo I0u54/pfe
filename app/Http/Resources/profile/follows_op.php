@@ -5,7 +5,7 @@ namespace App\Http\Resources\profile;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Tweets extends JsonResource
+class follower extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,12 +17,11 @@ class Tweets extends JsonResource
         // return parent::toArray($request);
 
         return [
-            'id_tweet' => $this->id ,
-            'image' => $this->image ,
-            'video' => $this->video ,
-            'description' => $this->description ,
-            'created_at' =>$this->created_at->diffForHumans() ,
-
+                'idUser' => $this->follower->id ,
+                'name' => $this->follower->name ,
+                'email' => $this->follower->email ,
+                'pseudo'=> $this->follower->pseudo  ,
+                'image' =>  $this->follower->extra_user->pp ?? null 
         ];
     }
 }
