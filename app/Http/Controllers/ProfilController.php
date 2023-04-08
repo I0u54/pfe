@@ -85,10 +85,7 @@ class ProfilController extends Controller
                     }]);
                 }])->first() ;   
                 
-    
         return $this->success(RcLikes::collection($data->like) , "this is likes user for  {$user->name} ");
-
-    
 
     }
 
