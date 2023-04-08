@@ -64,6 +64,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Like::class , 'idUser')->orderBy('created_at' , 'asc');
     }
+
+    public function bookmarks()
+    {
+        return $this->hasMany(Sauvguarde::class , 'idUser')->orderBy('created_at' , 'desc');
+    }
     
     // non utulisee
     public function comment()

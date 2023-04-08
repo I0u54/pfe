@@ -27,7 +27,9 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/tweets/createVideo',[TweetsController::class,'createVideo']);
     Route::put('/tweets/updateTweet/{id}',[TweetsController::class,'updateTweet']);
     Route::delete('/tweets/deleteTweet/{id}',[TweetsController::class,'deleteTweet']);
-    Route::get('liked/{slug}',[ProfilController::class,'liked']);
+   
+    Route::get('likedTweets/{slug}',[ProfilController::class,'likedTweets']);
+    Route::get('bookmarks/{slug}' ,[ProfilController::class,'bookmarks'] );
 });
 Route::post('/verifyEmail',[AuthController::class,'verifyEmail']);
 Route::post('/register',[AuthController::class,'register']);
@@ -41,4 +43,5 @@ Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
 Route::get('likes/{slug}',[ProfilController::class,'likes']);
 Route::get('follower/{slug}',[ProfilController::class,'follower']);
 Route::get('following/{slug}',[ProfilController::class,'following']);
+
 

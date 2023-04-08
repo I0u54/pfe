@@ -17,14 +17,16 @@ class Likes extends JsonResource
         // return parent::toArray($request);
 
         return [
+            
             'idTweet' => $this->like_tweet->id ,
+            'originalUserId' => $this->idUser ,
             'description' =>$this->like_tweet->description ,
             'image' =>$this->like_tweet->image ,
             'video' =>$this->like_tweet->video ,
             'comments' =>$this->like_tweet->tweet_comment_count ,
             'likes' =>$this->like_tweet->tweet_comment_count ,
             'created_at' =>$this->like_tweet->created_at->diffForHumans(),
-            'idUser' => $this->like_tweet->tweet_user->id ,
+            'idUserTweet' => $this->like_tweet->tweet_user->id ,
             'name' => $this->like_tweet->tweet_user->name ,
             'email' => $this->like_tweet->tweet_user->email ,
             'pseudo' => $this->like_tweet->tweet_user->pseudo ,
