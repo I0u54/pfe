@@ -24,6 +24,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/logout',[AuthController::class,'logout']);
     Route::post('/tweets/createTweet',[TweetsController::class,'createTweet']);
     Route::post('/tweets/createImage',[TweetsController::class,'createImage']);
+    Route::post('/tweets/createVideo',[TweetsController::class,'createVideo']);
+    Route::put('/tweets/updateTweet/{id}',[TweetsController::class,'updateTweet']);
+    Route::delete('/tweets/deleteTweet/{id}',[TweetsController::class,'deleteTweet']);
+    
 });
 Route::post('/verifyEmail',[AuthController::class,'verifyEmail']);
 Route::post('/register',[AuthController::class,'register']);
