@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Sauvguarde extends Model
 {
     use HasFactory;
+
+    
+    public function save_tweets()
+    {
+        return $this->belongsTo(Tweet::class , 'idTweet');
+    }
 }

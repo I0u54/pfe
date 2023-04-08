@@ -10,6 +10,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use App\Http\Resources\profile\Follower as RcFollower;
 use App\Http\Resources\profile\Following as RcFollowing;
 use App\Http\Resources\profile\Likes as RcLikes ;
+use App\Http\Resources\profile\Bookmarks as RcBookmarks;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -67,7 +68,7 @@ class ProfilController extends Controller
 
     }
 
-    public function likes($slug)
+    public function likedTweets($slug)
     {
         $user =User::where('pseudo' , $slug)->first();
 
@@ -121,6 +122,30 @@ class ProfilController extends Controller
         ->with('user_following.following.extra_user')->first();
         
         return $this->success(RcFollowing::collection($data->user_following) , "this is following user for  {$user->name} ");
+
+    }
+
+
+    public function bookmarks($slug)
+    {
+
+        $user =User::where('pseudo' , $slug)->first();
+
+        if(is_null($user)) :
+
+           return $this->error([] , "user doesn't exist" ,404);
+
+        endif ;
+
+        $data = User::where('pseudo' , $slug)->with(['bookmarks' => function (Builder $query) {
+            $query->with(['save_tweets' => function(Builder $query){
+
+                 $query->with('tweet_user.extra_user')->withCount('tweet_comment' , 'tweet_like');
+
+            }]);
+        }])->first() ;  
+
+        return $this->success(RcBookmarks::collection($data->bookmarks) , "this is bookmarks (saved) user for  {$user->name} ");
 
     }
 }

@@ -32,8 +32,6 @@ class Likes extends JsonResource
             'pseudo' => $this->like_tweet->tweet_user->pseudo ,
             'imageProfile' =>$this->like_tweet->tweet_user->extra_user->pp ?? null  ,
             
-            
-            
         ];
     }
 }
