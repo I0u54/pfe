@@ -70,7 +70,7 @@ class ProfilController extends Controller
         
     }
 
-    public function likes($slug)
+    public function liked($slug)
     {
         $user =User::where('pseudo' , $slug)->first();
 
