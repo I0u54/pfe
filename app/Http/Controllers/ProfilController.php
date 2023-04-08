@@ -70,30 +70,27 @@ class ProfilController extends Controller
         
     }
 
-    // public function likes($slug)
-    // {
-    //     $user =User::where('pseudo' , $slug)->first();
+    public function likes($slug)
+    {
+        $user =User::where('pseudo' , $slug)->first();
 
-    //     if(is_null($user)) :
+        if(is_null($user)) :
 
-    //        return $this->error([] , "user doesn't exist" ,404);
+           return $this->error([] , "user doesn't exist" ,404);
 
-    //     endif ;
+        endif ;
         
-    //     $data = User::where('pseudo' , $slug)->with(['like' => function (Builder $query) {
-    //                 $query->with(['tweet_like' => function(Builder $query){
+        $data = User::where('pseudo' , $slug)->with(['like' => function (Builder $query) {
+                    $query->with(['like_tweet' => function(Builder $query){
 
-    //                      $query->with('tweet_user');
+                         $query->with('tweet_user.extra_user')->withCount('tweet_comment' , 'tweet_like');
 
-    //                 }]);
-    //             }])->get() ;   
+                    }]);
+                }])->first() ;   
                 
-    
-    //     return $this->success(RcLikes::collection($data[0]->like) , "this is like user for  {$user->name} ");
+        return $this->success(RcLikes::collection($data->like) , "this is likes user for  {$user->name} ");
 
-    
-
-    // }
+    }
 
     public function  follower($slug)
     {

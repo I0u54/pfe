@@ -64,5 +64,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Like::class , 'idUser')->orderBy('created_at' , 'asc');
     }
+    
+    // non utulisee
+    public function comment()
+    {
+        return $this->hasMany(comment::class , 'idFollowing' )->orderBy('created_at' , 'asc');
+    }
 
 }

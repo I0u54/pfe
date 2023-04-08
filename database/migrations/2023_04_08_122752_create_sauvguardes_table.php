@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
-            $table->id('idComment');
-            $table->unsignedBigInteger('idUser');
-            $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('idTweet');
+        Schema::create('sauvguardes', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('idTweet') ;
             $table->foreign('idTweet')->references('id')->on('tweets')->onDelete('cascade');
-            $table->longText('body');
+            $table->unsignedBigInteger('idUser') ;
+            $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('sauvguardes');
     }
 };

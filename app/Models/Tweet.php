@@ -18,7 +18,14 @@ class Tweet extends Model
     public function tweet_comment()
     {
        
-        return $this->hasMany(Comment::class, 'idTweet');
+        return $this->hasMany(comment::class, 'idTweet')->orderBy('created_at' , 'desc');
+        
+    }
+
+    public function tweet_like()
+    {
+       
+        return $this->hasMany(Like::class, 'idTweet');
         
     }
 }
