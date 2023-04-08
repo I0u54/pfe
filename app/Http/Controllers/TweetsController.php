@@ -43,7 +43,7 @@ class TweetsController extends Controller
     }
     public function createVideo(Request $request){
         $this->validate($request,[
-            'video'=>'required',
+            'video' => 'required|mimes:mp4,avi,wmv|max:50000',
           
         ]);
         $video = $request->video;
