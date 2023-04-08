@@ -9,7 +9,7 @@ class Like extends Model
 {
     use HasFactory;
 
-    public function tweet_like()
+    public function like_tweet()
     {
         return $this->belongsTo(Tweet::class , 'idTweet' );
     }

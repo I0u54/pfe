@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/logout',[AuthController::class,'logout']);
+    Route::get('likes/{slug}',[ProfilController::class,'likes']);
 });
 Route::post('/verifyEmail',[AuthController::class,'verifyEmail']);
 Route::post('/register',[AuthController::class,'register']);
@@ -31,7 +32,6 @@ Route::post('/reset',[AuthController::class,'reset']);
 
 Route::get('profile/{slug}',[ProfilController::class,'index']);
 Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
-Route::get('likes/{slug}',[ProfilController::class,'likes']);
 Route::get('follower/{slug}',[ProfilController::class,'follower']);
 Route::get('following/{slug}',[ProfilController::class,'following']);
 

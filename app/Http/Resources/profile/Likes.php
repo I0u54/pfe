@@ -17,17 +17,19 @@ class Likes extends JsonResource
         // return parent::toArray($request);
 
         return [
-            'tweet_id' => $this->tweet_like->id ,
-            'description' =>$this->tweet_like->description ,
-            'image' =>$this->tweet_like->image ,
-            'video' =>$this->tweet_like->video ,
-            'created_at' =>$this->tweet_like->created_at->diffForHumans(),
-            'user' => [
-                'id_user' => $this->tweet_like->tweet_user->id ,
-                'name' => $this->tweet_like->tweet_user->name ,
-                'email' => $this->tweet_like->tweet_user->email ,
-                'pseudo' => $this->tweet_like->tweet_user->pseudo ,
-            ]
+            'idTweet' => $this->like_tweet->id ,
+            'description' =>$this->like_tweet->description ,
+            'image' =>$this->like_tweet->image ,
+            'video' =>$this->like_tweet->video ,
+            'comments' =>$this->like_tweet->tweet_comment_count ,
+            'likes' =>$this->like_tweet->tweet_comment_count ,
+            'created_at' =>$this->like_tweet->created_at->diffForHumans(),
+            'idUser' => $this->like_tweet->tweet_user->id ,
+            'name' => $this->like_tweet->tweet_user->name ,
+            'email' => $this->like_tweet->tweet_user->email ,
+            'pseudo' => $this->like_tweet->tweet_user->pseudo ,
+            'imageProfile' =>$this->like_tweet->tweet_user->extra_user->pp ?? null  ,
+            
         ];
     }
 }
