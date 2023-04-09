@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Sauvguarde;
 use App\Models\Tweet;
-use Illuminate\Http\Request;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
-
-use function PHPUnit\Framework\isNull;
 
 class SauvguardeController extends Controller
 {
@@ -36,7 +33,7 @@ class SauvguardeController extends Controller
 
         endif ;  
         
-        return $this->success([],"tweet don't exist");
+        return $this->error([],"tweet don't exist",404);
 
     }
 
@@ -49,7 +46,7 @@ class SauvguardeController extends Controller
         if($tweet) :
             if(is_null($save_tweet)):
          
-                 return $this->success([],"tweet tweet don't exist in  bookmars ");
+                 return $this->error([],"tweet tweet don't exist in  bookmars ",404);
      
              endif ;
              
@@ -59,7 +56,7 @@ class SauvguardeController extends Controller
 
         endif ;  
         
-        return $this->success([],"tweet don't exist");
+        return $this->error([],"tweet don't exist",404);
 
     }
 
