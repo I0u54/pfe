@@ -25,7 +25,7 @@ class SauvguardeController extends Controller
 
                 Sauvguarde::create([
                      'idTweet' => $idTweet ,
-                     'idUser' => 1 
+                     'idUser' => Auth::user()->id 
                  ]);
          
                  return $this->success([],'tweet has been saved');
