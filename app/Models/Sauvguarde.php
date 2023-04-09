@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Sauvguarde extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     
     public function save_tweets()

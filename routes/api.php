@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\TweetsController;
+use App\Http\Controllers\SauvguardeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,8 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
    
     Route::get('likedTweets/{slug}',[ProfilController::class,'likedTweets']);
     Route::get('bookmarks/{slug}' ,[ProfilController::class,'bookmarks'] );
+
+    
 });
 Route::post('/verifyEmail',[AuthController::class,'verifyEmail']);
 Route::post('/register',[AuthController::class,'register']);
@@ -43,5 +46,9 @@ Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
 Route::get('likes/{slug}',[ProfilController::class,'likes']);
 Route::get('follower/{slug}',[ProfilController::class,'follower']);
 Route::get('following/{slug}',[ProfilController::class,'following']);
+
+Route::post('/saveTweet/{idTweet}',[SauvguardeController::class,'saveTweet']);
+Route::post('/unsaveTweet/{idTweet}',[SauvguardeController::class,'unsaveTweet']);
+Route::post('/clearAllSaved',[SauvguardeController::class,'clearAllSaved']);
 
 

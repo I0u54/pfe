@@ -3,63 +3,73 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sauvguarde;
+use App\Models\Tweet;
 use Illuminate\Http\Request;
+use App\Traits\HttpResponses;
+use Illuminate\Support\Facades\Auth;
+
+use function PHPUnit\Framework\isNull;
 
 class SauvguardeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use HttpResponses;
+
+    public function saveTweet($idTweet)
     {
-        //
+
+        $save_tweet = Sauvguarde::where('idTweet' , $idTweet)->first() ;
+        $tweet = Tweet::find($idTweet) ;
+
+        if($tweet) :
+            if(is_null($save_tweet)):
+
+                Sauvguarde::create([
+                     'idTweet' => $idTweet ,
+                     'idUser' => 1 
+                 ]);
+         
+                 return $this->success([],'tweet has been saved');
+     
+             endif ; 
+
+             return $this->success([],'tweet already saved');
+
+        endif ;  
+        
+        return $this->success([],"tweet don't exist");
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function unsaveTweet($idTweet)
     {
-        //
+
+        $save_tweet = Sauvguarde::where('idTweet' , $idTweet)->first() ;
+        $tweet = Tweet::find($idTweet) ;
+
+        if($tweet) :
+            if(is_null($save_tweet)):
+         
+                 return $this->success([],"tweet tweet don't exist in  bookmars ");
+     
+             endif ;
+             
+             $save_tweet->delete() ;
+
+             return $this->success([],'tweet has been remove from bookmars');
+
+        endif ;  
+        
+        return $this->success([],"tweet don't exist");
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function clearAllSaved()
     {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Sauvguarde $sauvguarde)
-    {
-        //
-    }
+        $bookmars = Sauvguarde::truncate() ;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Sauvguarde $sauvguarde)
-    {
-        //
-    }
+        return $this->success([],"clear all bookmars ");
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Sauvguarde $sauvguarde)
-    {
-        //
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Sauvguarde $sauvguarde)
-    {
-        //
-    }
+  
 }
