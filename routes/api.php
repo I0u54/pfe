@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LikesController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\TweetsController;
 use App\Http\Controllers\SauvguardeController;
@@ -31,6 +32,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
    
     Route::get('likedTweets/{slug}',[ProfilController::class,'likedTweets']);
     Route::get('bookmarks/{slug}' ,[ProfilController::class,'bookmarks'] );
+    Route::post('likeTweet/{id}',[LikesController::class,'like']);
+    Route::post('disLikeTweet/{id}',[LikesController::class,'disLike']);
+
+
 
     
 });
