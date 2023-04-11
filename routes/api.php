@@ -30,7 +30,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::delete('/tweets/deleteTweet/{id}',[TweetsController::class,'deleteTweet']);
    
     Route::get('likedTweets/{slug}',[ProfilController::class,'likedTweets']);
-    Route::get('bookmarks/{slug}' ,[ProfilController::class,'bookmarks'] );
+    // Route::get('bookmarks/{slug}' ,[ProfilController::class,'bookmarks'] );
 
     
 });
@@ -43,12 +43,14 @@ Route::post('/reset',[AuthController::class,'reset']);
 
 Route::get('profile/{slug}',[ProfilController::class,'index']);
 Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
-Route::get('likes/{slug}',[ProfilController::class,'likes']);
+Route::get('likes/{slug}',[ProfilController::class,'likedTweets']);
 Route::get('follower/{slug}',[ProfilController::class,'follower']);
 Route::get('following/{slug}',[ProfilController::class,'following']);
 
 Route::post('/saveTweet/{idTweet}',[SauvguardeController::class,'saveTweet']);
 Route::post('/unsaveTweet/{idTweet}',[SauvguardeController::class,'unsaveTweet']);
 Route::post('/clearAllSaved',[SauvguardeController::class,'clearAllSaved']);
+
+Route::get('bookmarks/{slug}' ,[ProfilController::class,'bookmarks'] );
 
 

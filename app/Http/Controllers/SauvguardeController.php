@@ -14,7 +14,7 @@ class SauvguardeController extends Controller
     public function saveTweet($idTweet)
     {
 
-        $save_tweet = Sauvguarde::where('idTweet' , $idTweet)->first() ;
+        $save_tweet = Sauvguarde::where('idTweet' , $idTweet)->where('idUser' , Auth::user()->id )->first() ;
         $tweet = Tweet::find($idTweet) ;
 
         if($tweet) :
@@ -40,7 +40,7 @@ class SauvguardeController extends Controller
     public function unsaveTweet($idTweet)
     {
 
-        $save_tweet = Sauvguarde::where('idTweet' , $idTweet)->first() ;
+        $save_tweet = Sauvguarde::where('idTweet' , $idTweet)->where('idUser' , Auth::user()->id )->first() ;
         $tweet = Tweet::find($idTweet) ;
 
         if($tweet) :
@@ -63,7 +63,9 @@ class SauvguardeController extends Controller
     public function clearAllSaved()
     {
 
-        $bookmars = Sauvguarde::truncate() ;
+        $bookmars = Sauvguarde::where('idUser' , Auth::user()->id) ;
+
+        $bookmars->delete() ;
 
         return $this->success([],"clear all bookmars ");
 
