@@ -35,9 +35,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('likeTweet/{id}',[LikesController::class,'like']);
     Route::post('disLikeTweet/{id}',[LikesController::class,'disLike']);
 
-
-
-    
     Route::post('/saveTweet/{idTweet}',[SauvguardeController::class,'saveTweet']);
     Route::post('/unsaveTweet/{idTweet}',[SauvguardeController::class,'unsaveTweet']);
     Route::post('/clearAllSaved',[SauvguardeController::class,'clearAllSaved']);
@@ -53,12 +50,9 @@ Route::post('/reset',[AuthController::class,'reset']);
 
 Route::get('profile/{slug}',[ProfilController::class,'index']);
 Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
-<<<<<<< HEAD
 Route::get('follower/{slug}',[ProfilController::class,'follower']);
 Route::get('following/{slug}',[ProfilController::class,'following']);
-=======
 
->>>>>>> ebb1cbfce14d5d2f8c65316c85cc0d90ff367074
 
 
 
