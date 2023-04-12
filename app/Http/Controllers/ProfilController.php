@@ -60,13 +60,8 @@ class ProfilController extends Controller
         ->get();
         $allTweets = $tweets->merge($retweets);
 
-        //$sortedTweets = $allTweets->sortByDesc('created_at');
-        return $this->success([
-            'tweets'=>$allTweets,
-            
-
-            
-        ],'tweets shiped');
+        $allTweets = $allTweets->sortByDesc('created_at')->values();
+        return $this->success($allTweets,'tweets shiped');
         
     }
 
