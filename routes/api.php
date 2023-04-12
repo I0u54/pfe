@@ -37,7 +37,9 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('reTweet/{id}',[RetweetsController::class,'reTweet']);
     Route::post('removeReTweet/{id}',[RetweetsController::class,'removeReTweet']);
 
-
+    Route::post('/saveTweet/{idTweet}',[SauvguardeController::class,'saveTweet']);
+    Route::post('/unsaveTweet/{idTweet}',[SauvguardeController::class,'unsaveTweet']);
+    Route::post('/clearAllSaved',[SauvguardeController::class,'clearAllSaved']);
 
     
 });
@@ -50,12 +52,11 @@ Route::post('/reset',[AuthController::class,'reset']);
 
 Route::get('profile/{slug}',[ProfilController::class,'index']);
 Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
+Route::get('follower/{slug}',[ProfilController::class,'follower']);
+Route::get('following/{slug}',[ProfilController::class,'following']);
 
-Route::get('followers/{slug}',[ProfilController::class,'follower']);
-Route::get('followings/{slug}',[ProfilController::class,'following']);
 
-Route::post('/saveTweet/{idTweet}',[SauvguardeController::class,'saveTweet']);
-Route::post('/unsaveTweet/{idTweet}',[SauvguardeController::class,'unsaveTweet']);
-Route::post('/clearAllSaved',[SauvguardeController::class,'clearAllSaved']);
+
+
 
 
