@@ -45,7 +45,6 @@ class ProfilController extends Controller
         ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'name', 'pseudo', 'email','pp')
         ->orderBy('tweets.created_at','desc')
         ->get();
-    
 
         $retweets = Tweet::where('retweets.idUser',$slug[strlen($slug)-1])
         ->join('retweets','retweets.idTweet','=','tweets.id')
@@ -60,13 +59,8 @@ class ProfilController extends Controller
         ->get();
         $allTweets = $tweets->merge($retweets);
 
-        $sortedTweets = $allTweets->sortByDesc('created_at');
-        return $this->success([
-            'tweets'=>$sortedTweets,
-            
-
-            
-        ],'tweets shiped');
+        $allTweets = $allTweets->sortByDesc('created_at')->values();
+        return $this->success($allTweets,'tweets shiped');
         
     }
 

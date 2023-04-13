@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\RetweetsController;
 use App\Http\Controllers\TweetsController;
 use App\Http\Controllers\SauvguardeController;
 use App\Http\Controllers\FollowsController ;
@@ -30,11 +31,12 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/tweets/createVideo',[TweetsController::class,'createVideo']);
     Route::put('/tweets/updateTweet/{id}',[TweetsController::class,'updateTweet']);
     Route::delete('/tweets/deleteTweet/{id}',[TweetsController::class,'deleteTweet']);
-   
     Route::get('likedTweets/{slug}',[ProfilController::class,'likedTweets']);
     Route::get('bookmarks/{slug}' ,[ProfilController::class,'bookmarks'] );
     Route::post('likeTweet/{id}',[LikesController::class,'like']);
     Route::post('disLikeTweet/{id}',[LikesController::class,'disLike']);
+    Route::post('reTweet/{id}',[RetweetsController::class,'reTweet']);
+    Route::post('removeReTweet/{id}',[RetweetsController::class,'removeReTweet']);
 
     Route::post('/saveTweet/{idTweet}',[SauvguardeController::class,'saveTweet']);
     Route::post('/unsaveTweet/{idTweet}',[SauvguardeController::class,'unsaveTweet']);
