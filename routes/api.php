@@ -5,6 +5,7 @@ use App\Http\Controllers\LikesController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\TweetsController;
 use App\Http\Controllers\SauvguardeController;
+use App\Http\Controllers\FollowsController ;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,9 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/unsaveTweet/{idTweet}',[SauvguardeController::class,'unsaveTweet']);
     Route::post('/clearAllSaved',[SauvguardeController::class,'clearAllSaved']);
 
+    Route::post('/follow/{idUser}',[FollowsController::class,'follow']);
+    Route::post('/unfollow/{idUser}',[FollowsController::class,'unfollow']);
+
     
 });
 Route::post('/verifyEmail',[AuthController::class,'verifyEmail']);
@@ -47,11 +51,12 @@ Route::post('/login',[AuthController::class,'login']);
 Route::post('/forget',[AuthController::class,'forget']);
 Route::post('/reset',[AuthController::class,'reset']);
 
-
 Route::get('profile/{slug}',[ProfilController::class,'index']);
 Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
 Route::get('follower/{slug}',[ProfilController::class,'follower']);
 Route::get('following/{slug}',[ProfilController::class,'following']);
+
+
 
 
 
