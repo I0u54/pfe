@@ -17,7 +17,6 @@ class FollowsController extends Controller
         $user= User::find($idUser) ;
         $user_following = Follow::where('idFollowing' , $idUser)->where('idFollower' , Auth::user()->id)->first();
 
-
         if($user) :
             if(is_null($user_following)):
 
@@ -36,19 +35,13 @@ class FollowsController extends Controller
         
         return $this->error([],"user don't exist",404);
 
-
-
-        
-
     }
-
 
 
     public function unfollow($idUser)
     {
         $user= User::find($idUser) ;
         $user_following = Follow::where('idFollowing' , $idUser)->where('idFollower' , Auth::user()->id)->first();
-
 
         if($user) :
             if($user_following):
