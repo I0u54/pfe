@@ -11,7 +11,6 @@ use App\Http\Resources\profile\Follower as RcFollower;
 use App\Http\Resources\profile\Following as RcFollowing;
 use App\Http\Resources\profile\Likes as RcLikes ;
 use App\Http\Resources\profile\Bookmarks as RcBookmarks;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProfilController extends Controller
