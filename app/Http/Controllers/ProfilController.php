@@ -46,8 +46,8 @@ class ProfilController extends Controller
         ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'name', 'pseudo', 'email','pp')
         ->orderBy('tweets.created_at','desc')
         ->get();
-
-        $retweets = Tweet::where('retweets.idUser',$slug[strlen($slug)-1])
+         
+        $retweets = Tweet::where('retweets.idUser',User::where('pseudo',$slug)->select('id')->first()->id)
         ->join('retweets','retweets.idTweet','=','tweets.id')
         ->select('tweets.idUser','retweets.idUser as orginaUserId','tweets.id','description','image','video','retweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
         ->join('users','users.id','=','tweets.idUser')
