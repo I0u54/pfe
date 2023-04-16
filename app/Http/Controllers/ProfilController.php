@@ -43,7 +43,7 @@ class ProfilController extends Controller
         ->join('users','users.id','=','tweets.idUser')
         ->leftJoin('extar_users','extar_users.idUser','=','users.id')
         ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'name', 'pseudo', 'email','pp')
-        ->orderBy('tweets.created_at','desc')
+      
         ->get();
          
         $retweets = Tweet::where('retweets.idUser',User::where('pseudo',$slug)->select('id')->first()->id)
@@ -55,7 +55,7 @@ class ProfilController extends Controller
         ->leftJoin('extar_users','extar_users.idUser','=','users.id')
      
         ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'retweets.created_at', 'name', 'pseudo', 'email','pp','retweets.idUser')
-        ->orderBy('tweets.created_at','desc')
+      
         ->get();
         $allTweets = $tweets->merge($retweets);
 
