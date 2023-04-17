@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Follow;
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Notifications\follow as NotificationsFollow;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class FollowsController extends Controller
 {
@@ -15,16 +16,23 @@ class FollowsController extends Controller
     public function follow($idUser)
     {
         $user= User::find($idUser) ;
-        $user_following = Follow::where('idFollowing' , $idUser)->where('idFollower' , Auth::user()->id)->first();
+        $id_follower = Auth::user()->id ;
+        $user_following = Follow::where('idFollowing' , $idUser)->where('idFollower' , $id_follower)->first();
 
         if($user) :
             if(is_null($user_following)):
 
                 follow::create([
-                     'idFollower' => Auth::user()->id ,
+                     'idFollower' => $id_follower ,
                      'idFollowing' => $idUser
                  ]);
-         
+
+                 //Notification for follows
+
+                 $user_follower = User::where('id' , 2)->with('extra_user')->first() ;
+
+                 $user->notify(new NotificationsFollow($user_follower)) ;
+
                  return $this->success([],"You follow {$user->name}");
      
              endif ; 

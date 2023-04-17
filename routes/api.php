@@ -7,6 +7,7 @@ use App\Http\Controllers\RetweetsController;
 use App\Http\Controllers\TweetsController;
 use App\Http\Controllers\SauvguardeController;
 use App\Http\Controllers\FollowsController ;
+use App\Http\Controllers\NotificationsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,10 +32,13 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/tweets/createVideo',[TweetsController::class,'createVideo']);
     Route::put('/tweets/updateTweet/{id}',[TweetsController::class,'updateTweet']);
     Route::delete('/tweets/deleteTweet/{id}',[TweetsController::class,'deleteTweet']);
+
     Route::get('likedTweets/{slug}',[ProfilController::class,'likedTweets']);
     Route::get('bookmarks/{slug}' ,[ProfilController::class,'bookmarks'] );
+
     Route::post('likeTweet/{id}',[LikesController::class,'like']);
     Route::post('disLikeTweet/{id}',[LikesController::class,'disLike']);
+    
     Route::post('reTweet/{id}',[RetweetsController::class,'reTweet']);
     Route::post('removeReTweet/{id}',[RetweetsController::class,'removeReTweet']);
 
@@ -44,6 +48,9 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     Route::post('/follow/{idUser}',[FollowsController::class,'follow']);
     Route::post('/unfollow/{idUser}',[FollowsController::class,'unfollow']);
+
+    Route::get('/countNotification' , [NotificationsController::class , 'getCountNotifications']) ;
+    Route::get('/notifications' , [NotificationsController::class , 'getAllNotifications']) ;
 
     
 });
@@ -57,6 +64,8 @@ Route::get('profile/{slug}',[ProfilController::class,'index']);
 Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
 Route::get('follower/{slug}',[ProfilController::class,'follower']);
 Route::get('following/{slug}',[ProfilController::class,'following']);
+
+
 
 
 

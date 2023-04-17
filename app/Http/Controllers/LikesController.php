@@ -7,6 +7,8 @@ use App\Models\Tweet;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Notifications\Like as NotificationsLike;
 
 class LikesController extends Controller
 {
@@ -22,6 +24,13 @@ class LikesController extends Controller
             'idUser'=>Auth::user()->id,
             'idTweet'=>$id
         ]);
+
+        //Notification for likes 
+
+        $user = User::where('idTweet' , $id );
+        $user_like = User::where('id' , Auth::user()->id)->with('extra_user')->first() ;
+        $user->notify(new NotificationsLike($user_like)) ;
+
         return $this->success([],'like has been applied');
 
     }
