@@ -7,21 +7,17 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class Like extends Notification
+class Tweet extends Notification
 {
     use Queueable;
-
-    protected $user_like;
-    protected $idTweet;
+    protected $user_tweet ;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($user_like , $id)
+    public function __construct($user_tweet)
     {
-        $this->user_like = $user_like;
-        $this->idTweet = $id;
-        
+        $this->user_tweet = $user_tweet;
     }
 
     /**
@@ -33,6 +29,7 @@ class Like extends Notification
     {
         return ['database'];
     }
+
     /**
      * Get the array representation of the notification.
      *
@@ -41,11 +38,10 @@ class Like extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'idUser' => $this->user_like->id ,
-            'idTweet' => $this->idTweet ,
-            'name' => $this->user_like->name ,
-            'pseudo' => $this->user_like->pseudo ,
-            'pp' => $this->user_like->extra_user->pp ?? null
+            'idUser' => $this->user_tweet->id ,
+            'name' => $this->user_tweet->name ,
+            'pseudo' => $this->user_tweet->pseudo ,
+            'pp' => $this->user_tweet->extra_user->pp ?? null
         ];
     }
 }

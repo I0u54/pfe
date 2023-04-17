@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Notifications\follow as NotificationsFollow;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Notification;
+
 
 class FollowsController extends Controller
 {
@@ -29,7 +29,7 @@ class FollowsController extends Controller
 
                  //Notification for follows
 
-                 $user_follower = User::where('id' , 2)->with('extra_user')->first() ;
+                 $user_follower = User::where('id' , $id_follower)->with('extra_user')->first();
 
                  $user->notify(new NotificationsFollow($user_follower)) ;
 

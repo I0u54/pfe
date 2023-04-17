@@ -9,7 +9,10 @@ use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\User ;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Arr;
+use App\Notifications\Tweet as NotificationsTweet;
 
 class TweetsController extends Controller
 {
@@ -20,6 +23,17 @@ class TweetsController extends Controller
             'idUser'=>Auth::user()->id,
             'description'=>$request->description,
         ]);
+
+        // Notifications for tweets 
+
+        $user_tweet = User::where('id' , Auth::user()->id)->with('extra_user')->first();
+
+        $user_followers =  User::where('id' , Auth::user()->id)->with('user_follower.follower')->first();
+
+        $followers =  Arr::pluck($user_followers->user_follower, ['follower']);
+                
+        Notification::send($followers , new NotificationsTweet($user_tweet)) ;
+
         return $this->success([],'tweet has been created');
         
     }

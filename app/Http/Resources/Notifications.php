@@ -17,6 +17,7 @@ class Notifications extends JsonResource
         return [
             'id_notify' => $this->id ,
             'idUser' => $this->data['idUser'],
+            'idTweet' => $this->data['idTweet'] ?? null ,
             'type' => substr($this->type ,18 ,  ) ,
             'name' => $this->data['name'] ,
             'pseudo' => $this->data['pseudo'] ,
