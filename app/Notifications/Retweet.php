@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class Tweet extends Notification
+class Retweet extends Notification
 {
     use Queueable;
     protected $user_tweet ;
@@ -31,7 +31,6 @@ class Tweet extends Notification
     {
         return ['database'];
     }
-
     /**
      * Get the array representation of the notification.
      *

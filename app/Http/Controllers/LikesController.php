@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Like;
 use App\Models\Tweet;
 use App\Traits\HttpResponses;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Notifications\Like as NotificationsLike;
@@ -27,9 +26,9 @@ class LikesController extends Controller
 
         //Notification for likes 
 
-        // $user = User::where('idTweet' , $id );
-        // $user_like = User::where('id' , Auth::user()->id)->with('extra_user')->first() ;
-        // $user->notify(new NotificationsLike($user_like , $id)) ;
+        $user = Tweet::find($id)->with('tweet_user')->first()->only('tweet_user');
+        $user_like = User::where('id' , Auth::user()->id)->with('extra_user')->first() ;
+        $user['tweet_user']->notify(new NotificationsLike($user_like , $id)) ;
 
         return $this->success([],'like has been applied');
 

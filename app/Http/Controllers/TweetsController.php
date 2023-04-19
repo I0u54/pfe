@@ -20,20 +20,14 @@ class TweetsController extends Controller
     use HttpResponses;
     public function createTweet(StoreTweetRequest $request){
         $request->validated($request->all());
-        Tweet::create([
+        $tweet = Tweet::create([
             'idUser'=>Auth::user()->id,
             'description'=>$request->description,
         ]);
 
-        // Notifications for tweets 
+         // Notifications for tweets 
 
-        $user_tweet = User::where('id' , Auth::user()->id)->with('extra_user')->first();
-
-        $user_followers =  User::where('id' , Auth::user()->id)->with('user_follower.follower')->first();
-
-        $followers =  Arr::pluck($user_followers->user_follower, ['follower']);
-                
-        Notification::send($followers , new NotificationsTweet($user_tweet)) ;
+         $this->tweetNotifications($tweet->id);
 
         return $this->success([],'tweet has been created');
         
@@ -46,13 +40,18 @@ class TweetsController extends Controller
         $image = $request->image;
         $imageName = $image->hashName();
         Storage::putFileAs('public/images',$image,$imageName);
-        Tweet::create([
+        $tweet = Tweet::create([
             'idUser'=>Auth::user()->id,
             'description'=>$request->description == null ? '':$request->description,
             'image'=>asset('images/'.$imageName)
             
             
         ]);
+
+        // Notifications for tweets 
+
+        $this->tweetNotifications($tweet->id);
+
         return $this->success([],'tweet has been created');
         
     }
@@ -64,13 +63,17 @@ class TweetsController extends Controller
         $video = $request->video;
         $videoName = $video->hashName();
         Storage::putFileAs('public/videos',$video,$videoName);
-        Tweet::create([
+       $tweet = Tweet::create([
             'idUser'=>Auth::user()->id,
             'description'=>$request->description == null ? '':$request->description,
             'video'=>asset('videos/'.$videoName)
             
             
         ]);
+        // Notifications for tweets 
+
+        $this->tweetNotifications($tweet->id);
+        
         return $this->success([],'tweet has been created');
         
     }
@@ -91,6 +94,7 @@ class TweetsController extends Controller
         return $this->success([],'tweet has been deleted');
 
     }
+
     public function getTweet($id){
         $tweet = Tweet::where('tweets.id',$id)
         ->select('tweets.idUser','tweets.id','description','image','video','tweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
@@ -107,5 +111,18 @@ class TweetsController extends Controller
             'tweet'=>$tweet,
             'comments' =>$comments
         ]);
+    }
+
+    public function tweetNotifications($id) 
+    {
+
+        $user_tweet = User::where('id' , Auth::user()->id)->with('extra_user')->first();
+
+        $user_followers =  User::where('id' , Auth::user()->id)->with('user_follower.follower')->first();
+
+        $followers =  Arr::pluck($user_followers->user_follower, ['follower']);
+                
+        Notification::send($followers , new NotificationsTweet($user_tweet , $id)) ;
+
     }
 }
