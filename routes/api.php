@@ -12,6 +12,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\TestController ;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -53,6 +55,8 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/countNotification' , [NotificationsController::class , 'getCountNotifications']) ;
     Route::get('/notifications' , [NotificationsController::class , 'getAllNotifications']) ;
     Route::post('/extra_user/create',[UserController::class,'insertExtraUserData']);
+
+    Route::get('/test',[TestController::class,'test']);
 
     
 });
