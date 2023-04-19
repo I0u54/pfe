@@ -7,19 +7,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class Tweet extends Notification
+class Retweet extends Notification
 {
     use Queueable;
-    protected $user_tweet ;
-    protected $idTweet ;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($user_tweet , $idTweet)
+    public function __construct()
     {
-        $this->user_tweet = $user_tweet;
-        $this->idTweet = $idTweet;
+        //
     }
 
     /**
@@ -31,7 +28,6 @@ class Tweet extends Notification
     {
         return ['database'];
     }
-
     /**
      * Get the array representation of the notification.
      *
@@ -40,11 +36,7 @@ class Tweet extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'idUser' => $this->user_tweet->id ,
-            'idTweet' => $this->idTweet ,
-            'name' => $this->user_tweet->name ,
-            'pseudo' => $this->user_tweet->pseudo ,
-            'pp' => $this->user_tweet->extra_user->pp ?? null
+            //
         ];
     }
 }

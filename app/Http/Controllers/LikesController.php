@@ -26,9 +26,9 @@ class LikesController extends Controller
 
         //Notification for likes 
 
-        // $user = User::where('idTweet' , $id );
-        // $user_like = User::where('id' , Auth::user()->id)->with('extra_user')->first() ;
-        // $user->notify(new NotificationsLike($user_like , $id)) ;
+        $user = User::where('idTweet' , $id );
+        $user_like = User::where('id' , Auth::user()->id)->with('extra_user')->first() ;
+        $user->notify(new NotificationsLike($user_like , $id)) ;
 
         return $this->success([],'like has been applied');
 

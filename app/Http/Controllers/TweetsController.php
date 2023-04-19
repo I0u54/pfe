@@ -20,14 +20,14 @@ class TweetsController extends Controller
     use HttpResponses;
     public function createTweet(StoreTweetRequest $request){
         $request->validated($request->all());
-        Tweet::create([
+        $tweet = Tweet::create([
             'idUser'=>Auth::user()->id,
             'description'=>$request->description,
         ]);
 
          // Notifications for tweets 
 
-         $this->tweetNotifications();
+         $this->tweetNotifications($tweet->id);
 
         return $this->success([],'tweet has been created');
         
@@ -40,7 +40,7 @@ class TweetsController extends Controller
         $image = $request->image;
         $imageName = $image->hashName();
         Storage::putFileAs('public/images',$image,$imageName);
-        Tweet::create([
+        $tweet = Tweet::create([
             'idUser'=>Auth::user()->id,
             'description'=>$request->description == null ? '':$request->description,
             'image'=>asset('images/'.$imageName)
@@ -50,7 +50,7 @@ class TweetsController extends Controller
 
         // Notifications for tweets 
 
-        $this->tweetNotifications();
+        $this->tweetNotifications($tweet->id);
 
         return $this->success([],'tweet has been created');
         
@@ -113,7 +113,7 @@ class TweetsController extends Controller
         ]);
     }
 
-    public function tweetNotifications() 
+    public function tweetNotifications($id) 
     {
 
         $user_tweet = User::where('id' , Auth::user()->id)->with('extra_user')->first();
@@ -122,7 +122,7 @@ class TweetsController extends Controller
 
         $followers =  Arr::pluck($user_followers->user_follower, ['follower']);
                 
-        Notification::send($followers , new NotificationsTweet($user_tweet)) ;
+        Notification::send($followers , new NotificationsTweet($user_tweet , $id)) ;
 
     }
 }
