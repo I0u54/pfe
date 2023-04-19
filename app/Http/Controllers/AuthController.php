@@ -53,7 +53,7 @@ class AuthController extends Controller
         $request->validated($request->all());
         $token = EmailVerification::where('email', $request->email)->select('token')->first();
         if (!$token || $token->token != $request->token) {
-            return $this->error([], 'token mismatch', 403);
+            return $this->error([], 'token mismatch or user already registred', 403);
         }
         $data = User::create([
             'name' => $request->name,

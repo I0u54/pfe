@@ -21,15 +21,24 @@ class ProfilController extends Controller
         if(!User::where('pseudo',$slug)->first()){
             return $this->error([],'user not found',404);
         }
-        $user=User::where('pseudo',$slug)->leftJoin('extar_users','users.id','=','extar_users.idUser')->select('users.id','name','email','pseudo','birthday','users.created_at','bio','adresse','pp','cover')->first();
-        $following = Follow::where('users.pseudo',$slug)->leftJoin('users','users.id','=','follows.idFollower')->select(DB::raw('count(follows.id) as following'))->get();
-        $followers = Follow::where('users.pseudo',$slug)->leftJoin('users','users.id','=','follows.idFollowing')->select(DB::raw('count(follows.id) as followers' ))->get();
-        return $this->success([
+       
+        $user=User::where('pseudo',$slug)
+        ->leftJoin('extar_users','users.id','=','extar_users.idUser')
+        ->select('users.id','name','email','pseudo','birthday','users.created_at','bio','adresse','pp','cover')
+        ->first();
 
-            'user'=>$user,
-            'following'=>$following[0]->following,
-            'followers'=>$followers[0]->followers
-        ],'user shiped');
+        $followingCount = Follow::where('users.pseudo', $slug)
+        ->leftJoin('users', 'users.id', '=', 'follows.idFollower')
+        ->count();
+
+        $followersCount = Follow::where('users.pseudo', $slug)
+        ->leftJoin('users', 'users.id', '=', 'follows.idFollowing')
+        ->count();
+
+        $user->followings = $followingCount;
+        $user->followers = $followersCount;
+
+        return $this->success($user,'user shiped');
 
     }
     public function getTweets($slug){
@@ -86,7 +95,7 @@ class ProfilController extends Controller
 
     }
 
-    public function  follower($slug)
+    public function  followers($slug)
     {
 
         $user =User::where('pseudo' , $slug)->first();
@@ -100,11 +109,11 @@ class ProfilController extends Controller
         $data = User::where('pseudo' , $slug)
         ->with('user_follower.follower.extra_user')->first();
 
-        return $this->success(RcFollower::collection($data->user_follower) , "this is follower user for  {$user->name} ");
+        return $this->success(RcFollower::collection($data->user_follower) , "this is followers user for  {$user->name} ");
 
     }
 
-    public function  following($slug)
+    public function  followings($slug)
     {
         $user =User::where('pseudo' , $slug)->first();
 
@@ -117,7 +126,7 @@ class ProfilController extends Controller
          $data = User::where('pseudo' , $slug)
         ->with('user_following.following.extra_user')->first();
         
-        return $this->success(RcFollowing::collection($data->user_following) , "this is following user for  {$user->name} ");
+        return $this->success(RcFollowing::collection($data->user_following) , "this is followings user for  {$user->name} ");
 
     }
 

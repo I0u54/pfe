@@ -8,6 +8,7 @@ use App\Models\Tweet;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User ;
 use Illuminate\Support\Facades\Notification;
@@ -105,5 +106,22 @@ class TweetsController extends Controller
                 
         Notification::send($followers , new NotificationsTweet($user_tweet)) ;
 
+    }
+    public function getTweet($id){
+        $tweet = Tweet::where('tweets.id',$id)
+        ->select('tweets.idUser','tweets.id','description','image','video','tweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
+        ->leftJoin('likes','likes.idTweet','=','tweets.id')
+        ->leftJoin('comments','comments.idTweet','=','tweets.id')
+        ->join('users','users.id','=','tweets.idUser')
+        ->leftJoin('extar_users','extar_users.idUser','=','users.id')
+        ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'name', 'pseudo', 'email','pp')
+      
+        ->first();
+        // waiting for soufiane to push comments controller
+        $comments = [];
+        return $this->success([
+            'tweet'=>$tweet,
+            'comments' =>$comments
+        ]);
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\TweetsController;
 use App\Http\Controllers\SauvguardeController;
 use App\Http\Controllers\FollowsController ;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +52,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     Route::get('/countNotification' , [NotificationsController::class , 'getCountNotifications']) ;
     Route::get('/notifications' , [NotificationsController::class , 'getAllNotifications']) ;
+    Route::post('/extra_user/create',[UserController::class,'insertExtraUserData']);
 
     
 });
@@ -62,8 +64,9 @@ Route::post('/reset',[AuthController::class,'reset']);
 
 Route::get('profile/{slug}',[ProfilController::class,'index']);
 Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
-Route::get('follower/{slug}',[ProfilController::class,'follower']);
-Route::get('following/{slug}',[ProfilController::class,'following']);
+Route::get('tweet/{id}',[TweetsController::class,'getTweet']);
+Route::get('followers/{slug}',[ProfilController::class,'followers']);
+Route::get('followings/{slug}',[ProfilController::class,'followings']);
 
 
 
