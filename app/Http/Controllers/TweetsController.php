@@ -95,18 +95,6 @@ class TweetsController extends Controller
 
     }
 
-    public function tweetNotifications() 
-    {
-
-        $user_tweet = User::where('id' , Auth::user()->id)->with('extra_user')->first();
-
-        $user_followers =  User::where('id' , Auth::user()->id)->with('user_follower.follower')->first();
-
-        $followers =  Arr::pluck($user_followers->user_follower, ['follower']);
-                
-        Notification::send($followers , new NotificationsTweet($user_tweet)) ;
-
-    }
     public function getTweet($id){
         $tweet = Tweet::where('tweets.id',$id)
         ->select('tweets.idUser','tweets.id','description','image','video','tweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
@@ -123,5 +111,18 @@ class TweetsController extends Controller
             'tweet'=>$tweet,
             'comments' =>$comments
         ]);
+    }
+
+    public function tweetNotifications() 
+    {
+
+        $user_tweet = User::where('id' , Auth::user()->id)->with('extra_user')->first();
+
+        $user_followers =  User::where('id' , Auth::user()->id)->with('user_follower.follower')->first();
+
+        $followers =  Arr::pluck($user_followers->user_follower, ['follower']);
+                
+        Notification::send($followers , new NotificationsTweet($user_tweet)) ;
+
     }
 }
