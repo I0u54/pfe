@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('idUser');
             $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');
-            $table->string('bio');
-            $table->string('adresse');
-            $table->string('pp');
-            $table->string('cover');
+            $table->string('bio')->nullable();
+            $table->string('adresse')->nullable();
+            $table->string('pp')->nullable();
+            $table->string('cover')->nullable();
             $table->timestamps();
         });
     }

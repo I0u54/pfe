@@ -95,7 +95,7 @@ class ProfilController extends Controller
 
     }
 
-    public function  follower($slug)
+    public function  followers($slug)
     {
 
         $user =User::where('pseudo' , $slug)->first();
@@ -109,11 +109,11 @@ class ProfilController extends Controller
         $data = User::where('pseudo' , $slug)
         ->with('user_follower.follower.extra_user')->first();
 
-        return $this->success(RcFollower::collection($data->user_follower) , "this is follower user for  {$user->name} ");
+        return $this->success(RcFollower::collection($data->user_follower) , "this is followers user for  {$user->name} ");
 
     }
 
-    public function  following($slug)
+    public function  followings($slug)
     {
         $user =User::where('pseudo' , $slug)->first();
 
@@ -126,7 +126,7 @@ class ProfilController extends Controller
          $data = User::where('pseudo' , $slug)
         ->with('user_following.following.extra_user')->first();
         
-        return $this->success(RcFollowing::collection($data->user_following) , "this is following user for  {$user->name} ");
+        return $this->success(RcFollowing::collection($data->user_following) , "this is followings user for  {$user->name} ");
 
     }
 

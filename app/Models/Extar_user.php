@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Extar_user extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 }
