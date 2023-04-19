@@ -63,7 +63,7 @@ class TweetsController extends Controller
         $video = $request->video;
         $videoName = $video->hashName();
         Storage::putFileAs('public/videos',$video,$videoName);
-        Tweet::create([
+       $tweet = Tweet::create([
             'idUser'=>Auth::user()->id,
             'description'=>$request->description == null ? '':$request->description,
             'video'=>asset('videos/'.$videoName)
@@ -72,7 +72,7 @@ class TweetsController extends Controller
         ]);
         // Notifications for tweets 
 
-        $this->tweetNotifications();
+        $this->tweetNotifications($tweet->id);
         
         return $this->success([],'tweet has been created');
         
