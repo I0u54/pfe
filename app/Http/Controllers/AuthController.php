@@ -121,6 +121,7 @@ class AuthController extends Controller
     }
     public function reset(StorePasswordReset $request)
     {
+        $request->validated($request->all());
         $user = User::where('email', $request->email)->first();
         if (!$user) {
             return $this->error([], 'user not found ', 404);
