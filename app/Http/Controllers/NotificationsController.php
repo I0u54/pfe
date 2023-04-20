@@ -36,4 +36,15 @@ class NotificationsController extends Controller
 
         
     }
+
+    public function readAllNotifications()
+    {
+        $user = User::find(Auth::user()->id);
+ 
+        foreach ($user->unreadNotifications as $notification) {
+            $notification->markAsRead();
+        }
+
+        return $this->success([] , "Read all notifications");
+    }
 }
