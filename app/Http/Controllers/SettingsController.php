@@ -27,12 +27,11 @@ class SettingsController extends Controller
 
         $pseudo = Auth::user()->pseudo ;
         $user = Extar_user::where('idUser' , Auth::user()->id);
-
         $this->UpdateImg($request , $user , $pseudo);
 
         $user->update([
-            'bio' => $request->bio ?? '' , 
-            'adresse' => $request->adresse ?? '' ,
+            'bio' => $request->bio ?? null , 
+            'adresse' => $request->adresse ?? null ,
         ]);
 
         User::where('id' , Auth::user()->id)->update([
