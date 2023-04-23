@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TestController ;
+use App\Http\Controllers\SettingsController ;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,8 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/readNotifications' , [NotificationsController::class , 'readAllNotifications']) ;
 
     
+
+    Route::post('/editProfile',[SettingsController::class,'editProfile']);
 
     Route::get('/test',[TestController::class,'test']);
     

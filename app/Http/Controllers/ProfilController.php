@@ -153,4 +153,6 @@ class ProfilController extends Controller
         return $this->success(RcBookmarks::collection($data->bookmarks) , "this is bookmarks (saved) user for  {$user->name} ");
 
     }
+
+  
 }
