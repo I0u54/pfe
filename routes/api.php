@@ -56,9 +56,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/notifications' , [NotificationsController::class , 'getAllNotifications']) ;
     Route::get('/readNotifications' , [NotificationsController::class , 'readAllNotifications']) ;
 
-    Route::post('/extra_user/create',[UserController::class,'insertExtraUserData']);
+    
 
     Route::get('/test',[TestController::class,'test']);
+    
 
     
 });
