@@ -8,6 +8,7 @@ use App\Http\Requests\StorePasswordReset;
 use App\Http\Requests\StoreUserRequest;
 use App\Mail\verifyEmail;
 use App\Models\EmailVerification;
+use App\Models\Extar_user;
 use App\Models\PasswordResetToken;
 use App\Models\User;
 use App\Traits\HttpResponses;
@@ -69,6 +70,12 @@ class AuthController extends Controller
         $data->save();
         $data = User::where('id', $data->id)->first();
         EmailVerification::where('email', $request->email)->delete();
+        Extar_user::create([
+            'idUser'=>$data->id,
+            'bio'=>null,
+            'pp'=>null,
+            'cover'=>null
+        ]);
 
         return $this->success([
             'user' => $data,
