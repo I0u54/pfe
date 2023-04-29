@@ -41,8 +41,6 @@ class SettingsController extends Controller
 
         return $this->success([] , 'update profile successfuly');
             
-        
-        
     }
 
     public function UpdateImg($request, $user  , $pseudo)
