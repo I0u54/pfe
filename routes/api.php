@@ -71,6 +71,8 @@ Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/forget',[AuthController::class,'forget']);
 Route::post('/reset',[AuthController::class,'reset']);
+Route::get('/SocialLogin/{social}',[AuthController::class , 'redirectToprovider'] );
+Route::get('/SocialLogin/{social}/callback', [AuthController::class , 'callback']);
 
 Route::get('profile/{slug}',[ProfilController::class,'index']);
 Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
