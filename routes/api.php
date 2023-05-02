@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RetweetsController;
@@ -79,6 +80,9 @@ Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
 Route::get('tweet/{id}',[TweetsController::class,'getTweet']);
 Route::get('followers/{slug}',[ProfilController::class,'followers']);
 Route::get('followings/{slug}',[ProfilController::class,'followings']);
+
+//Comments
+Route::post('/comments',[CommentController::class,'CreateComment']);
 
 
 
