@@ -13,48 +13,27 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     use HttpResponses ;
-    // public function index(){
-    //     //$comments = Comment::with('replayComments')->get();
-    //     $comments=CommentResource::collection( Comment::with('replyComments')->get());
-    //     return $this->apiResponse($comments ,'ok',200);
-    // }
+    public function CreateComment($idTweet  , Request $request){
 
+        if(!Tweet::where('id',$idTweet)->first()){
+            return $this->error([],'tweet not found',404);
+        }
 
-    // public function show($id){
-    //      $comment =Comment::find($id);
-    //     if($comment){
-    //         return $this->apiResponse(new CommentResource($comment) ,'ok',200);
-    //       }
-    //       return $this->apiResponse(null ,'not found',401);
-    // }
+        $validator = Validator::make($request->all(), [
+            'body' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return $this->error( $validator->errors() , 'Verify inputs' , 404);
+        }
 
+        $comment=Comment::create([
+            'idTweet'=>$idTweet,
+            'idUser'=>Auth::user()->id,
+            'body'=>$request->body,
 
-    public function CreateComment(){
+        ]);
 
-        return 1;
-        // if(!Tweet::where('id',$idtweet)->first()){
-        //     return $this->error([],'tweet not found',404);
-        // }
-
-
-        // $validator = Validator::make($request->all(), [
-        //     'body' => 'required',
-        // ]);
-        // if ($validator->fails()) {
-        //     return $this->error( $validator->errors() , 'Verify inputs' , 404);
-        // }
-
-        // $comment=Comment::create([
-        //     'idTweet'=>$idtweet,
-        //     // 'idUser'=>Auth::user()->id,
-        //     'idUser'=>1,
-        //     'body'=>$request->body,
-
-        // ]);
-
-        //  return $this->success(new CommentResource($comment) ,'You commented successfully',201);
-        
-        // return $this->success(null ,'error',400);
+         return $this->success($comment,'You commented successfully',201);
     }
 
 

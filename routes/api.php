@@ -63,6 +63,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/editProfile',[SettingsController::class,'editProfile']);
 
     Route::get('/test',[TestController::class,'test']);
+
+    
+    //Comments
+    Route::post('comments/{idTweet}',[CommentController::class,'CreateComment']);
     
 
     
@@ -80,11 +84,6 @@ Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
 Route::get('tweet/{id}',[TweetsController::class,'getTweet']);
 Route::get('followers/{slug}',[ProfilController::class,'followers']);
 Route::get('followings/{slug}',[ProfilController::class,'followings']);
-
-//Comments
-Route::post('/comments',[CommentController::class,'CreateComment']);
-
-
 
 
 
