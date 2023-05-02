@@ -37,35 +37,37 @@ class CommentController extends Controller
     }
 
 
-    // public function update(Request $request,$id){
+    public function updateComment(Request $request,$id){
+        if(!Tweet::where('id',$id)->first()){
+            return $this->error([],'tweet not found',404);
+        }
 
-    //     $validator = Validator::make($request->all(), [
-    //         'body' => 'required',
+        $validator = Validator::make($request->all(), [
+            'body' => 'required',
   
-    //     ]);
-    //     if ($validator->fails()) {
-    //         return $this->success(null ,$validator->errors(),400);
-    //     }
+        ]);
+        if ($validator->fails()) {
+            return $this->error( $validator->errors() , 'Verify inputs' , 404);
+        }
 
-    //     $comment =Comment::find($id);
-    //     if(!$comment){
-    //         return $this->success(null ,'not found',404);
-    //     }
+        $comment =Comment::find($id);
+        if(!$comment){
+            return $this->error( $validator->errors() , 'not found' , 404);
+        }
 
-    //     $comment->update($request->all());
-    //     if($comment){
-    //         return $this->success(new CommentResource($comment) ,'the comment updated',201);
-    //     }
-    // }
+        $comment->update($request->all());
 
-    // public function destroy($id){
-    //     $comment =Comment::find($id);
-    //     if(!$comment){
-    //         return $this->success(null ,'not found',404);
-    //     }
-    //     $comment->delete($id);
-    //     if($comment){
-    //         return $this->success(null ,'the post deleted',200);
-    //       }
-    // }
+        return $this->success($comment,'update successfully successfully',201);
+    }
+
+    public function destroyComment($id){
+        $comment =Comment::find($id);
+        if(!$comment){
+            return $this->error(null , 'not found' , 404);
+        }
+        $comment->delete($id);
+        if($comment){
+            return $this->success(null ,'the post deleted',200);
+          }
+    }
 }
