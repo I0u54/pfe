@@ -66,7 +66,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     
     //Comments
-    Route::post('comments/{idTweet}',[CommentController::class,'CreateComment']);
+    Route::post('comments/create/{idTweet}',[CommentController::class,'CreateComment']);
     
 
     
