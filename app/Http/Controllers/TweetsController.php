@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreImageRequest;
 use App\Http\Requests\StoreTweetRequest;
+use App\Models\Comment;
 use App\Models\Tweet;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
@@ -105,8 +106,8 @@ class TweetsController extends Controller
         ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'name', 'pseudo', 'email','pp')
       
         ->first();
-        // waiting for soufiane to push comments controller
-        $comments = [];
+       
+        $comments = Comment::where('idTweet',$id)->join('users','users.id','=','comments.idUser')->select('users.pseudo','users.email','comments.idComment','comments.created_at','comments.body','extar_users.pp')->leftJoin('extar_users','extar_users.idUser','=','users.id')->orderBy('comments.created_at','desc')->get();
         return $this->success([
             'tweet'=>$tweet,
             'comments' =>$comments
