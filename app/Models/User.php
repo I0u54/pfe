@@ -69,6 +69,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(Sauvguarde::class , 'idUser')->orderBy('created_at' , 'desc');
     }
+
+
+    public function user_tweets()
+    {
+        return $this->hasMany(Tweet::class , 'idUser')->orderBy('created_at' , 'desc');
+    }
+
+    public function user_retweets()
+    {
+        return $this->hasMany(Retweet::class , 'idUser')->orderBy('created_at' , 'desc');
+    }
+    
     
     // non utulisee
     public function comment()

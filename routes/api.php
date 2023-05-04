@@ -8,8 +8,8 @@ use App\Http\Controllers\RetweetsController;
 use App\Http\Controllers\TweetsController;
 use App\Http\Controllers\SauvguardeController;
 use App\Http\Controllers\FollowsController ;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationsController;
-use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -57,6 +57,8 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/countNotification' , [NotificationsController::class , 'getCountNotifications']) ;
     Route::get('/notifications' , [NotificationsController::class , 'getAllNotifications']) ;
     Route::get('/readNotifications' , [NotificationsController::class , 'readAllNotifications']) ;
+
+    Route::get('/tweets' , [HomeController::class , 'getAllTweets']) ;
 
     
 
