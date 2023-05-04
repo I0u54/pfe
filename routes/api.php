@@ -68,8 +68,8 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     
     //Comments
     Route::post('comments/create/{idTweet}',[CommentController::class,'CreateComment']);
-    Route::post('comment/update/{id}',[CommentaireController::class,'updateComment']);
-    Route::post('/comments/delete/{id}',[CommentaireController::class,'destroyComment']);
+    Route::put('comments/update/{id}',[CommentController::class,'updateComment']);
+    Route::delete('/comments/delete/{id}',[CommentController::class,'destroyComment']);
 
     //replayComment
     Route::post('replay/create/{idComment}',[ReplayController::class,'createReplayComment']);

@@ -38,8 +38,8 @@ class CommentController extends Controller
 
 
     public function updateComment(Request $request,$id){
-        if(!Tweet::where('id',$id)->first()){
-            return $this->error([],'tweet not found',404);
+        if(!Comment::where('idComment',$id)->where('idUser',Auth::user()->id)->first()){
+            return $this->error([],'comment not found',404);
         }
 
         $validator = Validator::make($request->all(), [
@@ -49,25 +49,19 @@ class CommentController extends Controller
         if ($validator->fails()) {
             return $this->error( $validator->errors() , 'Verify inputs' , 404);
         }
+        Comment::where('idComment',$id)->where('idUser',Auth::user()->id)->update([
+            'body'=>$request->body,
+        ]);
 
-        $comment =Comment::find($id);
-        if(!$comment){
-            return $this->error( $validator->errors() , 'not found' , 404);
-        }
-
-        $comment->update($request->all());
-
-        return $this->success($comment,'update successfully successfully',201);
+        return $this->success([],'comment updated successfully',201);
     }
 
     public function destroyComment($id){
-        $comment =Comment::find($id);
-        if(!$comment){
-            return $this->error(null , 'not found' , 404);
+        if(!Comment::where('idComment',$id)->where('idUser',Auth::user()->id)->first()){
+            return $this->error([],'comment not found',404);
         }
-        $comment->delete($id);
-        if($comment){
-            return $this->success(null ,'the Comment deleted',200);
-          }
+        Comment::where('idComment',$id)->where('idUser',Auth::user()->id)->delete();
+            return $this->success([] ,'the Comment has benn deleted',200);
+          
     }
 }

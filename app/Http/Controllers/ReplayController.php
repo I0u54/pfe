@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Replay;
+use App\Models\Replie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,7 +12,7 @@ class ReplayController extends Controller
 {
     public function createReplayComment($idComment , Request $request){
 
-        if(!Replay::where('id',$idComment)->first()){
+        if(!Replie::where('id',$idComment)->first()){
             return $this->error([],'tweet not found',404);
         }
 
@@ -23,7 +23,7 @@ class ReplayController extends Controller
             return $this->error( $validator->errors() , 'Verify inputs' , 404);
         }
         
-        $replay=Replay::create([
+        $replay=Replie::create([
             'idReplier'=>Auth::user()->id,
             'idComment'=>$idComment,
             'replyBody'=>$request->body,
@@ -34,7 +34,7 @@ class ReplayController extends Controller
 
     public function updateReplayComment($idComment , Request $request){
 
-        if(!Replay::where('id',$idComment)->first()){
+        if(!Replie::where('id',$idComment)->first()){
             return $this->error([],'tweet not found',404);
         }
 
@@ -45,7 +45,7 @@ class ReplayController extends Controller
             return $this->error( $validator->errors() , 'Verify inputs' , 404);
         }
 
-        $replay=Replay::find($idComment);
+        $replay=Replie::find($idComment);
         if(!$replay){
             return $this->error( $validator->errors() , 'not found' , 404);
         }
@@ -57,7 +57,7 @@ class ReplayController extends Controller
     }
 
     public function destroyReplayComment($idComment){
-        $replay=Replay::find($idComment);
+        $replay=Replie::find($idComment);
         if(!$replay){
             return $this->error(null , 'not found' , 404);
         }
