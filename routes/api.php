@@ -71,10 +71,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::put('comments/update/{id}',[CommentController::class,'updateComment']);
     Route::delete('/comments/delete/{id}',[CommentController::class,'destroyComment']);
 
-    //replayComment
-    Route::post('replay/create/{idComment}',[ReplayController::class,'createReplayComment']);
-    Route::post('replay/update/{idComment}',[ReplayController::class,'updateReplayComment']);
-    Route::post('replay/delete/{idComment}',[ReplayController::class,'destroyReplayComment']);
+    //replyComment
+    Route::post('replies/create/{idComment}',[RepliesController::class,'createReply']);
+    Route::post('replies/update/{idComment}',[RepliesController::class,'updateReply']);
+    Route::post('replies/delete/{idComment}',[RepliesController::class,'destroyReply']);
     
 
     

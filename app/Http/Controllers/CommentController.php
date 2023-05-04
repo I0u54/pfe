@@ -61,7 +61,7 @@ class CommentController extends Controller
             return $this->error([],'comment not found',404);
         }
         Comment::where('idComment',$id)->where('idUser',Auth::user()->id)->delete();
-            return $this->success([] ,'the Comment has benn deleted',200);
+            return $this->success([] ,'the Comment has been deleted',200);
           
     }
 }
