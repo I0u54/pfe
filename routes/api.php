@@ -9,6 +9,7 @@ use App\Http\Controllers\TweetsController;
 use App\Http\Controllers\SauvguardeController;
 use App\Http\Controllers\FollowsController ;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\ReplayController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,11 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('comments/create/{idTweet}',[CommentController::class,'CreateComment']);
     Route::post('comment/update/{id}',[CommentaireController::class,'updateComment']);
     Route::post('/comments/delete/{id}',[CommentaireController::class,'destroyComment']);
+
+    //replayComment
+    Route::post('replay/create/{idComment}',[ReplayController::class,'createReplayComment']);
+    Route::post('replay/update/{idComment}',[ReplayController::class,'updateReplayComment']);
+    Route::post('replay/delete/{idComment}',[ReplayController::class,'destroyReplayComment']);
     
 
     

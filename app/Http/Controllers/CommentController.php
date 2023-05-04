@@ -67,7 +67,7 @@ class CommentController extends Controller
         }
         $comment->delete($id);
         if($comment){
-            return $this->success(null ,'the post deleted',200);
+            return $this->success(null ,'the Comment deleted',200);
           }
     }
 }
