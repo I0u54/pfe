@@ -33,7 +33,7 @@ class CommentController extends Controller
 
         ]);
 
-         return $this->success($comment,'You commented successfully',201);
+         return $this->success([],'You commented successfully',201);
     }
 
 

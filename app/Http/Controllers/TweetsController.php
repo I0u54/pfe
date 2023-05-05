@@ -107,7 +107,7 @@ class TweetsController extends Controller
       
         ->first();
        
-        $comments = Comment::where('idTweet',$id)->join('users','users.id','=','comments.idUser')->select('users.pseudo','users.email','comments.idComment','comments.created_at','comments.body','extar_users.pp')->leftJoin('extar_users','extar_users.idUser','=','users.id')->orderBy('comments.created_at','desc')->get();
+        $comments = Comment::where('idTweet',$id)->join('users','users.id','=','comments.idUser')->select('users.pseudo','users.email','comments.idComment','comments.created_at','comments.body','extar_users.pp','users.name')->leftJoin('extar_users','extar_users.idUser','=','users.id')->orderBy('comments.created_at','desc')->get();
         return $this->success([
             'tweet'=>$tweet,
             'comments' =>$comments

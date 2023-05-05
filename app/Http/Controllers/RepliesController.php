@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Replie;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class RepliesController extends Controller
 {
+    use HttpResponses;
     public function createReply(Request $request,$id){
 
         if(!Comment::where('idComment',$id)->first()){
@@ -26,7 +28,7 @@ class RepliesController extends Controller
         Replie::create([
             'idReplier'=>Auth::user()->id,
             'idComment'=>$id,
-            'replyBody'=>$request->body,
+            'replyBody'=>$request->replyBody,
 
         ]);
         return $this->success([],'You replied successfully',201);
@@ -63,6 +65,20 @@ class RepliesController extends Controller
             return $this->success([] ,'the reply has been deleted',200);
           
     }
+    // get replies for a comment
+    public function getReplies($id){
+        if(!Comment::where('idComment',$id)->first()){
+            return $this->error([],'comment not found',404);
+        }
+        $replies = Replie::where('idComment',$id)
+        ->join('users','users.id','=','replies.idReplier')
+        ->leftJoin('extar_users','extar_users.idUser','=','users.id')
+        ->select('replyBody','replies.created_at','pp','pseudo','name','email','replies.id')
+        ->orderBy('replies.created_at','desc')
+        ->get();
+        return $this->success($replies,'replies fetched with success');
+    }
+
 
     }
     

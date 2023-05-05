@@ -9,8 +9,7 @@ use App\Http\Controllers\TweetsController;
 use App\Http\Controllers\SauvguardeController;
 use App\Http\Controllers\FollowsController ;
 use App\Http\Controllers\NotificationsController;
-use App\Http\Controllers\ReplayController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\RepliesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -73,8 +72,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     //replyComment
     Route::post('replies/create/{idComment}',[RepliesController::class,'createReply']);
-    Route::post('replies/update/{idComment}',[RepliesController::class,'updateReply']);
-    Route::post('replies/delete/{idComment}',[RepliesController::class,'destroyReply']);
+    Route::put('replies/update/{id}',[RepliesController::class,'updateReply']);
+    Route::delete('replies/delete/{id}',[RepliesController::class,'destroyReply']);
+    Route::get('replies/{idComment}',[RepliesController::class,'getReplies']);
+
     
 
     
