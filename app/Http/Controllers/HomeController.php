@@ -50,4 +50,8 @@ class HomeController extends Controller
         return $this->success(new RcHome( $tweets , $retweets , $tweets_other_user  ) , 'get all tweet ') ;
 
     }
+
+    public function Who_to_follow(){
+        return 1 ;
+    }
 }

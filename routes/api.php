@@ -10,10 +10,7 @@ use App\Http\Controllers\SauvguardeController;
 use App\Http\Controllers\FollowsController ;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationsController;
-<<<<<<< HEAD
-=======
 use App\Http\Controllers\RepliesController;
->>>>>>> 780d03feeac6ffd5727ec758c2659cb62c591ec0
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -62,7 +59,9 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/notifications' , [NotificationsController::class , 'getAllNotifications']) ;
     Route::get('/readNotifications' , [NotificationsController::class , 'readAllNotifications']) ;
 
+    //Home
     Route::get('/tweets' , [HomeController::class , 'getAllTweets']) ;
+    Route::get('/Who_to_follow' , [HomeController::class , 'Who_to_follow']) ;
 
     
 

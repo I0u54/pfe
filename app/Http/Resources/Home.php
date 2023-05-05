@@ -15,21 +15,26 @@ class Home extends JsonResource
     private $finalData  ;
     public function __construct($tweets , $retweets , $tweets_other_user) {
         // Ensure we call the parent constructor
-         foreach($tweets as $tweet){
-            array_push($this->tweets , [
-                'idTweet' => $tweet->id ,
-                'idUser' => $tweet->idUser ,
-                'image' => $tweet->image ,
-                'video' => $tweet->video ,
-                'type' => 'tweet' ,
-                'name' => $tweet->tweet_user->name ,
-                'pseudo' =>$tweet->tweet_user->pseudo ,
-                'pp' => $tweet->tweet_user->extra_user->pp ?? null ,
-                'created_at' => $tweet->created_at
+         if(!empty($tweets)){
+            foreach($tweets as $tweet){
+                array_push($this->tweets , [
+                    'idTweet' => $tweet->id ,
+                    'idUser' => $tweet->idUser ,
+                    'image' => $tweet->image ,
+                    'video' => $tweet->video ,
+                    'type' => 'tweet' ,
+                    'name' => $tweet->tweet_user->name ,
+                    'pseudo' =>$tweet->tweet_user->pseudo ,
+                    'pp' => $tweet->tweet_user->extra_user->pp ?? null ,
+                    'created_at' => $tweet->created_at
+    
+                ]);
+        
+            }
+         }
+         
 
-            ]);
-        };
-
+       if(!empty($retweets)){
         foreach($retweets as $tweet){
             array_push($this->retweets , [
                 'idTweet' => $tweet->id ,
@@ -49,7 +54,9 @@ class Home extends JsonResource
 
             ]);
         };
+       }
 
+       if(!empty($tweets_other_user)){
         foreach($tweets_other_user as $tweet){
             array_push($this->tweets_other_user , [
                 'idTweet' => $tweet->id ,
@@ -64,6 +71,7 @@ class Home extends JsonResource
 
             ]);
         };
+       }
 
         $this->finalData = collect(Arr::collapse([$this->tweets , $this->retweets]))->sortByDesc('created_at')->all();
 
