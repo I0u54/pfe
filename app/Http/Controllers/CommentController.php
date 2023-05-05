@@ -33,39 +33,35 @@ class CommentController extends Controller
 
         ]);
 
-         return $this->success($comment,'You commented successfully',201);
+         return $this->success([],'You commented successfully',201);
     }
 
 
-    // public function update(Request $request,$id){
+    public function updateComment(Request $request,$id){
+        if(!Comment::where('idComment',$id)->where('idUser',Auth::user()->id)->first()){
+            return $this->error([],'comment not found',404);
+        }
 
-    //     $validator = Validator::make($request->all(), [
-    //         'body' => 'required',
+        $validator = Validator::make($request->all(), [
+            'body' => 'required',
   
-    //     ]);
-    //     if ($validator->fails()) {
-    //         return $this->success(null ,$validator->errors(),400);
-    //     }
+        ]);
+        if ($validator->fails()) {
+            return $this->error( $validator->errors() , 'Verify inputs' , 404);
+        }
+        Comment::where('idComment',$id)->where('idUser',Auth::user()->id)->update([
+            'body'=>$request->body,
+        ]);
 
-    //     $comment =Comment::find($id);
-    //     if(!$comment){
-    //         return $this->success(null ,'not found',404);
-    //     }
+        return $this->success([],'comment updated successfully',201);
+    }
 
-    //     $comment->update($request->all());
-    //     if($comment){
-    //         return $this->success(new CommentResource($comment) ,'the comment updated',201);
-    //     }
-    // }
-
-    // public function destroy($id){
-    //     $comment =Comment::find($id);
-    //     if(!$comment){
-    //         return $this->success(null ,'not found',404);
-    //     }
-    //     $comment->delete($id);
-    //     if($comment){
-    //         return $this->success(null ,'the post deleted',200);
-    //       }
-    // }
+    public function destroyComment($id){
+        if(!Comment::where('idComment',$id)->where('idUser',Auth::user()->id)->first()){
+            return $this->error([],'comment not found',404);
+        }
+        Comment::where('idComment',$id)->where('idUser',Auth::user()->id)->delete();
+            return $this->success([] ,'the Comment has been deleted',200);
+          
+    }
 }
