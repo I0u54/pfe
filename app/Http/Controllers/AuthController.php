@@ -14,6 +14,9 @@ use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Str;
 
+use Socialite;
+use Illuminate\Support\Carbon ;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -152,5 +155,42 @@ class AuthController extends Controller
         } else {
             return $this->error([], 'password do not match', 403);
         }
+    }
+
+    public function redirectToprovider($social){
+        
+        $success['url'] = Socialite::driver($social)->stateless()->redirect()->getTargetUrl();
+       
+        return $this->success($success ,'successfuly' ) ;
+    }
+
+    public function callback($social) {
+        $data = Socialite::driver($social)->stateless()->user();
+        $user = User::where('email' , $data->email)->first();
+        $name = $data->getName();
+        $email = $data->getEmail();
+        $avatar = $data->getAvatar();
+        $birthday = $data->getBirthday();
+
+        if(!$user){
+            $user = User::create([
+                'name' => $name,
+                'email' => $email,
+                'email_verified_at' => Carbon::now(),
+                'password' => Hash::make($email),
+                'birthDay' => $birthday ?? null 
+            ]);
+            $user->pseudo='@'.Str::slug($user->name).$user->id;
+            $user->save();
+            Extar_user::create([
+                'idUser'=>$user->id,
+                'bio'=>null,
+                'pp'=>$avatar ?? null,
+                'cover'=>null
+            ]);
+        }
+        $success['token'] = $user->createToken('API token for' . $name)->plainTextToken;
+        $success['user' ]= $user ;
+        return $this->success($success , 'successfuly') ;
     }
 }

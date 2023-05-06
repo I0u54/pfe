@@ -18,7 +18,7 @@ class TestController extends Controller
         // return $this->success($user , 'ok'); ;
         $user = User::where('id' , Auth::user()->id)->with('extra_user')->first() ;
         return $user ;
- 
+       
  
     }
 }

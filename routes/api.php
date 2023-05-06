@@ -1,14 +1,16 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\RetweetsController;
 use App\Http\Controllers\TweetsController;
 use App\Http\Controllers\SauvguardeController;
 use App\Http\Controllers\FollowsController ;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationsController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\RepliesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -57,11 +59,28 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/notifications' , [NotificationsController::class , 'getAllNotifications']) ;
     Route::get('/readNotifications' , [NotificationsController::class , 'readAllNotifications']) ;
 
+    //Home
+    Route::get('/tweets' , [HomeController::class , 'getAllTweets']) ;
+    Route::get('/Who_to_follow' , [HomeController::class , 'Who_to_follow']) ;
+
     
 
     Route::post('/editProfile',[SettingsController::class,'editProfile']);
 
     Route::get('/test',[TestController::class,'test']);
+
+    
+    //Comments
+    Route::post('comments/create/{idTweet}',[CommentController::class,'CreateComment']);
+    Route::put('comments/update/{id}',[CommentController::class,'updateComment']);
+    Route::delete('/comments/delete/{id}',[CommentController::class,'destroyComment']);
+
+    //replyComment
+    Route::post('replies/create/{idComment}',[RepliesController::class,'createReply']);
+    Route::put('replies/update/{id}',[RepliesController::class,'updateReply']);
+    Route::delete('replies/delete/{id}',[RepliesController::class,'destroyReply']);
+    Route::get('replies/{idComment}',[RepliesController::class,'getReplies']);
+
     
 
     
@@ -71,14 +90,14 @@ Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/forget',[AuthController::class,'forget']);
 Route::post('/reset',[AuthController::class,'reset']);
+Route::get('/SocialLogin/{social}',[AuthController::class , 'redirectToprovider'] );
+Route::get('/SocialLogin/{social}/callback', [AuthController::class , 'callback']);
 
 Route::get('profile/{slug}',[ProfilController::class,'index']);
 Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
 Route::get('tweet/{id}',[TweetsController::class,'getTweet']);
 Route::get('followers/{slug}',[ProfilController::class,'followers']);
 Route::get('followings/{slug}',[ProfilController::class,'followings']);
-
-
 
 
 
