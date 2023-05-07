@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Home as RcHome ;
+use App\Http\Resources\Users_To_Follow;
 use App\Models\Tweet;
 use App\Traits\HttpResponses;
-use Illuminate\Http\Request;
 use App\Models\User ;
 use Illuminate\Support\Facades\Auth ;
 use Illuminate\Support\Arr;
@@ -52,6 +52,12 @@ class HomeController extends Controller
     }
 
     public function Who_to_follow(){
-        return 1 ;
+        $user = Auth::user();
+        $usersToFollow = User::whereNotIn('id', $user->user_following()->pluck('idFollowing')->toArray())
+                    ->where('id', '!=', $user->id)->with('extra_user')
+                    ->inRandomOrder()
+                    ->limit(20)
+                    ->get();
+        return $this->success(Users_To_Follow::collection($usersToFollow) , 'users to follow') ;         
     }
 }
