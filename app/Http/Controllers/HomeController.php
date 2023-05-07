@@ -49,7 +49,7 @@ class HomeController extends Controller
         return $this->success(new RcHome($tweets, $retweets, $tweets_other_user), 'get all tweet ');
     }
  public function getTrends() { 
-    $results = DB::select("
+    $hashtags = DB::select("
     SELECT COUNT(*) AS count, SUBSTRING_INDEX(SUBSTRING_INDEX(words, ' ', n), ' ', -1) AS hashtag
     FROM (
       SELECT TRIM(SUBSTRING_INDEX(SUBSTRING_INDEX(description, ' ', n.n), ' ', -1)) AS words, n.n
@@ -78,7 +78,7 @@ class HomeController extends Controller
     
       
     
-     return $this->success($results,'hashtags fetched with success');
+     return $this->success($hashtags,'hashtags fetched with success');
      }
     public function getTweetsByHashtag($hashtag)
 {
