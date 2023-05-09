@@ -60,14 +60,17 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/readNotifications' , [NotificationsController::class , 'readAllNotifications']) ;
 
     //Home
-    Route::get('/tweets' , [HomeController::class , 'getAllTweets']) ;
-    Route::get('/Who_to_follow' , [HomeController::class , 'Who_to_follow']) ;
-
+    Route::get('/' , [HomeController::class , 'getAllTweets']) ;
+    Route::get('/usersToFollow' , [HomeController::class , 'Who_to_follow']) ;
+    
+    
+   
+    
     
 
     Route::post('/editProfile',[SettingsController::class,'editProfile']);
 
-    Route::get('/test',[TestController::class,'test']);
+    // Route::get('/test',[TestController::class,'test']);
 
     
     //Comments
@@ -85,6 +88,9 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     
 });
+Route::get('/trends/{hashtag}',[HomeController::class ,'getTweetsByHashtag']);
+Route::get('/trends',[HomeController::class , 'getTrends']);
+    
 Route::post('/verifyEmail',[AuthController::class,'verifyEmail']);
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);

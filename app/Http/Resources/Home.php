@@ -80,8 +80,6 @@ class Home extends JsonResource
     public function toArray(Request $request): array
     {
 
-        return [
-            $this->allTweets
-        ];
+        return $this->allTweets;
     }
 }
