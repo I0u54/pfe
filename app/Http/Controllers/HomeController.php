@@ -97,12 +97,15 @@ class HomeController extends Controller
 
     public function Who_to_follow(){
         $user = Auth::user();
-        $usersToFollow = User::whereNotIn('id', $user->user_following()->pluck('idFollowing')->toArray())
+        $users =User::where('id' , '!=' , $user->id)->with('extra_user')->whereNotIn('id', $user->user_follower()->pluck('idFollower')->toArray())->inRandomOrder()->limit(20)->get();
+        $usersToFollow = User::whereIn('id', $user->user_follower()->pluck('idFollower')->toArray())
                     ->where('id', '!=', $user->id)->with('extra_user')
                     ->inRandomOrder()
-                    ->limit(20)
+                    ->limit(10)
                     ->get();
-
-        return $this->success(Users_To_Follow::collection($usersToFollow) , 'users to follow') ;         
+                    
+        $all_users = Arr::collapse([$users , $usersToFollow]);
+        
+        return $this->success(Users_To_Follow::collection($all_users) , 'users to follow') ;         
     }
 }
