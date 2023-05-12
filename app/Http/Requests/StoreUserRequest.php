@@ -22,7 +22,6 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'token'=>['required'],
             'birthDay'=>['required','date'],
             'name'=>['required','string','min:3','max:25'],
             'email'=>['required','email','unique:users'],
