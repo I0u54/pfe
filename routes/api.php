@@ -92,6 +92,7 @@ Route::get('/trends/{hashtag}',[HomeController::class ,'getTweetsByHashtag']);
 Route::get('/trends',[HomeController::class , 'getTrends']);
     
 Route::post('/verifyEmail',[AuthController::class,'verifyEmail']);
+Route::post('/verifyToken/{email}/{token}',[AuthController::class,'verifyToken']);
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/forget',[AuthController::class,'forget']);

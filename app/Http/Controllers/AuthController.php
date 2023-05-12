@@ -52,13 +52,22 @@ class AuthController extends Controller
         return $this->success([], 'token has been sent to your email');
     }
 
+    public function verifyToken($email , $token) 
+    {
+        $token_verify =EmailVerification::where('email' , $email )->first() ;
+
+        if($token == $token_verify->token) :
+
+            return $this->success([] , 'token has been verify');
+        endif;
+        
+        return $this->error([] , 'token mismatch or user already registred' , 403);
+
+    }
+
     public function register(StoreUserRequest $request)
     {
         $request->validated($request->all());
-        $token = EmailVerification::where('email', $request->email)->select('token')->first();
-        if (!$token || $token->token != $request->token) {
-            return $this->error([], 'token mismatch or user already registred', 403);
-        }
         $data = User::create([
             'name' => $request->name,
             'birthDay' => $request->birthDay,
@@ -66,8 +75,6 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             
         ]);
-        
-        
         
         $data->pseudo='@'.Str::slug($data->name).$data->id;
         $data->save();
