@@ -18,12 +18,15 @@ class HomeController extends Controller
     use HttpResponses ;
     public function getAllTweets()
     {
-        $user_followers_tweets =  User::where('id' , Auth::user()->id)->with(['user_follower' => function (Builder $query){
-            $query->with(['follower'=> function (Builder $query) {
-                $query->with('user_tweets.tweet_user.extra_user') ;
+        $user_followers_tweets =  User::where('id' , Auth::user()->id)->with(['user_following' => function (Builder $query){
+            $query->with(['following'=> function (Builder $query) {
+                $query->with(['user_tweets' => function(Builder $query){
+                    $query->with( 'tweet_user.extra_user')->withCount( 'tweet_like' , 'tweet_comment');
+                }] ) ;
             }]);
 
         }])->first();
+
 
         $user_followers_retweets=  User::where('id' , Auth::user()->id)->with(['user_follower' => function (Builder $query){
             $query->with(['follower'=> function (Builder $query) {
@@ -32,7 +35,7 @@ class HomeController extends Controller
 
         }])->first();
 
-        $followers_tweets =  Arr::pluck($user_followers_tweets->user_follower, ['follower']);
+        $followers_tweets =  Arr::pluck($user_followers_tweets->user_following, ['following']);
         $followers_retweets =  Arr::pluck($user_followers_retweets->user_follower, ['follower']);
 
        
@@ -45,9 +48,8 @@ class HomeController extends Controller
 
         $id_user_tweet =  Arr::pluck($tweets, ['idUser']);
 
-        $tweets_other_user=  Tweet::whereNotIn('idUser' , array_unique($id_user_tweet))->with('tweet_user.extra_user')->orderBy('created_at' , 'desc')->get();
+        $tweets_other_user=  Tweet::whereNotIn('idUser' , array_unique($id_user_tweet))->with('tweet_user.extra_user')->withCount( 'tweet_like' , 'tweet_comment')->orderBy('created_at' , 'desc')->get();
 
-    
 
         return $this->success(new RcHome( $tweets , $retweets , $tweets_other_user  ) , 'get all tweet ') ;
 

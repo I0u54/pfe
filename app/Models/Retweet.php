@@ -21,4 +21,18 @@ class Retweet extends Model
     {
         return $this->belongsTo(User::class, 'idUser');
     }
+
+    public function retweet_comment()
+    {
+       
+        return $this->hasMany(comment::class, 'idReTweet')->orderBy('created_at' , 'desc');
+        
+    }
+
+    public function retweet_like()
+    {
+       
+        return $this->hasMany(Like::class, 'idReTweet');
+        
+    }
 }

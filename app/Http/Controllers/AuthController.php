@@ -13,6 +13,7 @@ use App\Models\PasswordResetToken;
 use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 use Socialite;
 use Illuminate\Support\Carbon ;
@@ -92,9 +93,43 @@ class AuthController extends Controller
             'token' => $data->createToken('API token for' . $data->name)->plainTextToken
         ], 'user stored with success');
     }
-    public function login(StoreLoginRequest $request)
+    public function VerifyEmailBeforeLogin(Request $request)
     {
-        $request->validated($request->all());
+        $validator = Validator::make($request->all(), [
+            'email' => ['required','email'  ],
+        ]);
+        if ($validator->fails()) {
+            return $this->error( $validator->errors() , 'Verify inputs' , 403);
+        }
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            return $this->success([] , 'this email correct');
+        } else {
+            return $this->error([], 'this email incorrect', 403);
+        }
+    }
+
+    public function VerifyEmailBeforeRegister(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => ['required','email' , 'unique:users'],
+            'name' => ['required'] , 
+            'birthDay' => ['required']
+        ]);
+        if ($validator->fails()) {
+            return $this->error( $validator->errors() , 'Verify inputs' , 403);
+        }
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            return $this->success([] , 'this email correct');
+        } else {
+            return $this->error([], 'this email incorrect', 403);
+        }
+    }
+
+    public function login(StoreLoginRequest $request )
+    {
+        $request->validated($request->all() );
         $user = User::where('email', $request->email)->first();
         if ($user) {
             if (Hash::check($request->password, $user->password)) {
