@@ -29,7 +29,7 @@ class verifyEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('webmaestros1@gmail.com', 'dd201'),
+            from: new Address('webmaestros1@gmail.com', 'Wazo'),
             subject: 'verify email',
         );
     }
@@ -53,4 +53,5 @@ class verifyEmail extends Mailable
     {
         return [];
     }
+
 }

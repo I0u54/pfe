@@ -96,7 +96,7 @@ class AuthController extends Controller
     public function VerifyEmailBeforeLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => ['required','email'  ],
+            'email' => ['required','email' ],
         ]);
         if ($validator->fails()) {
             return $this->error( $validator->errors() , 'Verify inputs' , 403);
