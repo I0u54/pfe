@@ -18,7 +18,7 @@ class HomeController extends Controller
     use HttpResponses ;
     public function getAllTweets()
     {
-        $user_followers_tweets =  User::where('id' , Auth::user()->id)->with(['user_following' => function (Builder $query){
+        $user_following_tweets =  User::where('id' , Auth::user()->id)->with(['user_following' => function (Builder $query){
             $query->with(['following'=> function (Builder $query) {
                 $query->with(['user_tweets' => function(Builder $query){
                     $query->with( 'tweet_user.extra_user')->withCount( 'tweet_like' , 'tweet_comment');
@@ -28,21 +28,23 @@ class HomeController extends Controller
         }])->first();
 
 
-        $user_followers_retweets=  User::where('id' , Auth::user()->id)->with(['user_follower' => function (Builder $query){
-            $query->with(['follower'=> function (Builder $query) {
-                $query->with('user_retweets.retweet_user.extra_user')->with('user_retweets.tweet_retweet.tweet_user.extra_user') ;
+        $user_following_retweets=  User::where('id' , Auth::user()->id)->with(['user_following' => function (Builder $query){
+            $query->with(['following'=> function (Builder $query) {
+                $query->with(['user_retweets' => function(Builder $query){
+                    $query->with( 'retweet_user.extra_user')->with('tweet_retweet.tweet_user.extra_user')->withCount( 'retweet_like' , 'retweet_comment');
+                }] ) ;
             }]);
+         
 
         }])->first();
 
-        $followers_tweets =  Arr::pluck($user_followers_tweets->user_following, ['following']);
-        $followers_retweets =  Arr::pluck($user_followers_retweets->user_follower, ['follower']);
-
-       
-        $getTweets =  Arr::pluck($followers_tweets, ['user_tweets']);
-        $getRetweets =  Arr::pluck($followers_retweets, ['user_retweets']);
-
         
+        $following_tweets =  Arr::pluck($user_following_tweets->user_following, ['following']);
+        $following_retweets =  Arr::pluck($user_following_retweets->user_following, ['following']);
+       
+        $getTweets =  Arr::pluck($following_tweets, ['user_tweets']);
+        $getRetweets =  Arr::pluck($following_retweets, ['user_retweets']);
+
         $tweets = Arr::collapse($getTweets);
         $retweets = Arr::collapse($getRetweets);
 
