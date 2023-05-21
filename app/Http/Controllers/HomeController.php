@@ -112,4 +112,16 @@ class HomeController extends Controller
         
         return $this->success(Users_To_Follow::collection($all_users) , 'users to follow') ;         
     }
+
+    public function search($name)
+    {
+        $user = User::where('name' , 'like' , "%".$name."%")->with('extra_user')->get() ;
+
+        if( count($user) > 0){
+            return $this->success(Users_To_Follow::collection($user), 'search user');
+        }
+
+        return $this->error([] , 'user not found' , 403);
+
+    }
 }

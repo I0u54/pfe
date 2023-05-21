@@ -62,6 +62,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     //Home
     Route::get('/' , [HomeController::class , 'getAllTweets']) ;
     Route::get('/usersToFollow' , [HomeController::class , 'Who_to_follow']) ;
+    Route::get('/search/{name}' , [HomeController::class , 'search']) ;
     
     
    
