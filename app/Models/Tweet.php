@@ -28,4 +28,8 @@ class Tweet extends Model
         return $this->hasMany(Like::class, 'idTweet');
         
     }
+
+    public function liked_tweet(){
+        return   $this->hasOne(Like::class, 'idTweet');
+     }
 }

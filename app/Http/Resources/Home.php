@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 
+use function PHPUnit\Framework\isNull;
+
 class Home extends JsonResource
 {
     private $tweets = [] ;
@@ -23,6 +25,7 @@ class Home extends JsonResource
                     'image' => $tweet->image ,
                     'description' => $tweet->description ,
                     'video' => $tweet->video ,
+                    'like' => $tweet->liked_tweet  ? true : false  ,
                     'like_count' => $tweet->tweet_like_count ,
                     'comment_count' => $tweet->tweet_comment_count,
                     'type' => 'tweet' ,
@@ -46,6 +49,7 @@ class Home extends JsonResource
                 'video' => $tweet->tweet_retweet->video ,
                 'description' => $tweet->tweet_retweet->description ,
                 'like_count' => $tweet->retweet_like_count ,
+                'like' => $tweet->liked_retweet  ? true : false ,
                 'comment_count' => $tweet->retweet_comment_count,
                 'description' => $tweet->tweet_retweet->description ,
                 'type' => 'retweet' ,
@@ -71,6 +75,7 @@ class Home extends JsonResource
                 'video' => $tweet->video ,
                 'description' => $tweet->description ,
                 'like_count' => $tweet->tweet_like_count ,
+                'like' => $tweet->liked_tweet ? true : false ,
                 'comment_count' => $tweet->tweet_comment_count,
                 'type' => 'tweet' ,
                 'name' => $tweet->tweet_user->name ,

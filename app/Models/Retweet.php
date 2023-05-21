@@ -35,4 +35,7 @@ class Retweet extends Model
         return $this->hasMany(Like::class, 'idReTweet');
         
     }
+    public function liked_retweet(){
+        return   $this->hasOne(Like::class, 'idTweet');
+     }
 }
