@@ -50,9 +50,9 @@ class SettingsController extends Controller
         if($request->hasFile('pp')){
             $img = $request->file('pp');
             $pp = $img->hashName();
-            Storage::putFileAs("public/images/{$pseudo}/pp",$img,$pp);
+            Storage::putFileAs("public/images/{$pseudo}/pp/",$img,$pp);
             $user->update([
-                'pp' => asset("images/{$pseudo}/pp".$pp) ,
+                'pp' => asset("images/{$pseudo}/pp/".$pp) ,
             ]);
         }
         if($request->hasFile('cover')){
