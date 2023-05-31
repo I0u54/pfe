@@ -10,5 +10,5 @@
 ## About This API
 
 # API_PFE
-This is the most popular api created by sbo3a d ISTIA
+This is the most popular api created by the epic trio
 
