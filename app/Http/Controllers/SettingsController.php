@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User ;
 use App\Traits\HttpResponses;
 use Illuminate\Support\Facades\Auth ;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -64,5 +65,51 @@ class SettingsController extends Controller
             ]);
         }
 
+    }
+
+    public function updateInfo( Request $request )
+    {
+        $user =  User::where('id' , Auth::user()->id);
+        $validate = Validator::make($request->all() , [
+            'email'=> ['unique:users' , 'email'] , 
+            'pseudo' => ['unique:users'] ,
+            'password' =>  ['required']
+        ]);
+
+        if($validate->fails()){
+            return $this->error('verify input' , $validate->errors() , 403);
+        }
+        if($request->email) {
+
+            $user->update([
+                'email' => $request->email
+            ]);
+
+            return $this->success([] , 'email update');
+           
+        }
+        if($request->pseudo) {
+
+            $user->update([
+                'pseudo' => $request->pseudo
+            ]);
+
+            return $this->success([] , 'pseudo update');
+           
+        }
+
+        if($request->password) {
+
+            $user->update([
+                'password' => Hash::make($request->password)
+            ]);
+
+            return $this->success([] , 'password update');
+           
+        }
+
+        return $this->error([] , 'update : email , password , pseudo' , 403);
+
+        
     }
 }

@@ -75,6 +75,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
         
 
     Route::post('/editProfile',[SettingsController::class,'editProfile']);
+    Route::post('/updateInfo',[SettingsController::class,'updateInfo']);
 
     // Route::get('/test',[TestController::class,'test']);
 
