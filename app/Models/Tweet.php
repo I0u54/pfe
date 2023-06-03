@@ -29,7 +29,17 @@ class Tweet extends Model
         
     }
 
+    public function retweet_tweet(){
+        return $this->hasMany(Retweet::class , 'idTweet');
+    }
+
     public function liked_tweet(){
-        return   $this->hasOne(Like::class, 'idTweet');
-     }
+        return   $this->hasOne(Like::class, 'idTweet')->where('idUser' , auth()->user()->id);
+    }
+
+    public function tweet_save(){
+
+        return   $this->hasOne(Sauvguarde::class, 'idTweet')->where('idUser' , auth()->user()->id);
+
+    }
 }

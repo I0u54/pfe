@@ -90,4 +90,15 @@ class User extends Authenticatable
         return $this->hasMany(comment::class , 'idFollowing' )->orderBy('created_at' , 'asc');
     }
 
+    //Message
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'idSender');
+    }
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'idReceiver');
+    }
+
+
 }

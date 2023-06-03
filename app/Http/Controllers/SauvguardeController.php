@@ -63,9 +63,7 @@ class SauvguardeController extends Controller
     public function clearAllSaved()
     {
 
-        $bookmars = Sauvguarde::where('idUser' , Auth::user()->id)->get() ;
-
-        $bookmars->delete() ;
+        $bookmars = Sauvguarde::where('idUser' , Auth::user()->id)->delete() ;
 
         return $this->success([],"clear all bookmars ");
 

@@ -36,6 +36,13 @@ class Retweet extends Model
         
     }
     public function liked_retweet(){
-        return   $this->hasOne(Like::class, 'idTweet');
+        return   $this->hasOne(Like::class, 'idReTweet')->where('idUser' , auth()->user()->id);
      }
+
+     public function retweet_save(){
+
+        return   $this->hasOne(Sauvguarde::class, 'idTweet')->where('idUser' , auth()->user()->id);
+
+    }
+
 }
