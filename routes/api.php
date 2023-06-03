@@ -13,6 +13,7 @@ use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\RepliesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MessageCotroller;
 
 use App\Http\Controllers\TestController ;
 use App\Http\Controllers\SettingsController ;
@@ -65,9 +66,13 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/search/{name}' , [HomeController::class , 'search']) ;
     
     
-   
-    
-    
+   //Message
+    Route::post('message/{idReceiver}', [MessageCotroller::class, 'createConversation']);
+    Route::get('conversations/{userId}', [MessageCotroller::class, 'getConversations']);
+
+    Route::delete('messages/{messageId}', [MessageCotroller::class, 'deleteMessage']);
+    Route::delete('conversations/{userId}', [MessageCotroller::class, 'deleteConversation']);
+        
 
     Route::post('/editProfile',[SettingsController::class,'editProfile']);
 

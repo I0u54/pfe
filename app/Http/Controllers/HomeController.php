@@ -21,9 +21,9 @@ class HomeController extends Controller
         $user_following_tweets =  User::where('id' , Auth::user()->id)->with(['user_following' => function (Builder $query){
             $query->with(['following'=> function (Builder $query) {
                 $query->with(['user_tweets' => function(Builder $query){
-                    $query->with( 'tweet_user.extra_user')->with(['liked_tweet' => function(Builder $query){
-                        $query->where('idUser' , auth()->user()->id)->first() ;
-                    }])->withCount( 'tweet_like' , 'tweet_comment');
+                    $query->with( 'tweet_user.extra_user')->with('liked_tweet')
+                    ->with('tweet_save')
+                    ->withCount( 'tweet_like' , 'tweet_comment' , 'retweet_tweet');
                 }] ) ;
             }]);
 
@@ -32,16 +32,15 @@ class HomeController extends Controller
         $user_following_retweets=  User::where('id' , Auth::user()->id)->with(['user_following' => function (Builder $query){
             $query->with(['following'=> function (Builder $query) {
                 $query->with(['user_retweets' => function(Builder $query){
-                    $query->with( 'retweet_user.extra_user')->with('tweet_retweet.tweet_user.extra_user')->with(['liked_retweet' => function(Builder $query){
-                        $query->where('idUser' , auth()->user()->id)->first() ;
-                    }])->withCount( 'retweet_like' , 'retweet_comment');
+                    $query->with( 'retweet_user.extra_user')
+                    ->with('tweet_retweet.tweet_user.extra_user')
+                    ->with('liked_retweet')->with('retweet_save')
+                    ->withCount( 'retweet_like' , 'retweet_comment' , 'tweet_retweet');
                 }] ) ;
             }]);
 
 
         }])->first();
-        
-
         
         $following_tweets =  Arr::pluck($user_following_tweets->user_following, ['following']);
         $following_retweets =  Arr::pluck($user_following_retweets->user_following, ['following']);
@@ -55,9 +54,11 @@ class HomeController extends Controller
 
         $id_user_tweet =  Arr::pluck($tweets, ['idUser']);
 
-        $tweets_other_user=  Tweet::whereNotIn('idUser' , array_unique($id_user_tweet))->with('tweet_user.extra_user')->with(['liked_tweet' => function(Builder $query){
-            $query->where('idUser' , auth()->user()->id)->first() ;
-        }])->withCount( 'tweet_like' , 'tweet_comment')->orderBy('created_at' , 'desc')->get();
+        $tweets_other_user=  Tweet::whereNotIn('idUser' , array_unique($id_user_tweet))
+        ->with('tweet_user.extra_user')->with('liked_tweet')
+        ->with('tweet_save')
+        ->withCount( 'tweet_like' , 'tweet_comment' , 'retweet_tweet')
+        ->orderBy('created_at' , 'desc')->get();
 
 
         return $this->success(new RcHome( $tweets , $retweets , $tweets_other_user  ) , 'get all tweet ') ;
