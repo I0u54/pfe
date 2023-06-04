@@ -23,14 +23,17 @@ class Bookmarks extends JsonResource
             'description' =>$this->save_tweets->description ,
             'image' =>$this->save_tweets->image ,
             'video' =>$this->save_tweets->video ,
-            'comments' =>$this->save_tweets->tweet_comment_count ,
-            'likes' =>$this->save_tweets->tweet_comment_count ,
-            'created_at' =>$this->save_tweets->created_at->diffForHumans(),
+            'comment_count' =>$this->save_tweets->tweet_comment_count ,
+            'retweet_count'=> $this->save_tweets->retweet_tweet_count ,
+            'like_count' =>$this->save_tweets->tweet_like_count ,
+            'created_at' =>$this->save_tweets->created_at,
+            'like' => $this->save_tweets->liked_tweet ? true  : false ,
+            'save' => $this->save_tweets->tweet_save ? true  : false ,
             'idUserTweet' => $this->save_tweets->tweet_user->id ,
             'name' => $this->save_tweets->tweet_user->name ,
             'email' => $this->save_tweets->tweet_user->email ,
             'pseudo' => $this->save_tweets->tweet_user->pseudo ,
-            'imageProfile' =>$this->save_tweets->tweet_user->extra_user->pp ?? null  ,
+            'pp' =>$this->save_tweets->tweet_user->extra_user->pp ?? null  ,
 
         ];
     }

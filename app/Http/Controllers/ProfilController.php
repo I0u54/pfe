@@ -145,10 +145,11 @@ class ProfilController extends Controller
         $data = User::where('pseudo' , $slug)->with(['bookmarks' => function (Builder $query) {
             $query->with(['save_tweets' => function(Builder $query){
 
-                 $query->with('tweet_user.extra_user')->withCount('tweet_comment' , 'tweet_like');
+                 $query->with('tweet_user.extra_user')->with('tweet_save')->with('liked_tweet')->withCount('tweet_comment' , 'tweet_like' , 'retweet_tweet');
 
             }]);
         }])->first() ;  
+
 
         return $this->success(RcBookmarks::collection($data->bookmarks) , "this is bookmarks (saved) user for  {$user->name} ");
 
