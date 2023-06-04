@@ -34,7 +34,7 @@ class MessageCotroller extends Controller
     public function getConversations($userId)
     {
         $user = User::find($userId);
-
+    
         $messages = collect();
     
         // Fetch the received messages for the user
@@ -43,28 +43,34 @@ class MessageCotroller extends Controller
         // Get the distinct IDs of the senders from received messages
         $senderIds = $receivedMessages->pluck('idSender')->unique();
     
-        // Loop through the sender IDs and retrieve the corresponding sender users
-        foreach ($senderIds as $senderId) {
-            // Retrieve the sender user
-            $sender = User::find($senderId);
+        // Get the distinct IDs of the receivers from sent messages
+        $receiverIds = $user->sentMessages->pluck('idReceiver')->unique();
     
-            // Filter the received messages for the current sender
-            $senderReceivedMessages = $receivedMessages->where('idSender', $senderId);
+        // Combine the sender IDs and receiver IDs
+        $allIds = $senderIds->concat($receiverIds)->unique();
     
-            // Get the sent messages by the user to the current sender
-            $sentMessages = $user->sentMessages->where('idReceiver', $senderId);
+        // Loop through all IDs and retrieve the corresponding users
+        foreach ($allIds as $id) {
+            // Retrieve the user by ID
+            $otherUser = User::where('id' , $id)->with('extra_user')->first();
     
-            // Combine the sent and received messages
-            $conversationMessages = $sentMessages->concat($senderReceivedMessages)
+            // Filter the received messages for the current user
+            $userReceivedMessages = $receivedMessages->where('idSender', $id);
+    
+            // Filter the sent messages for the current user
+            $userSentMessages = $user->sentMessages->where('idReceiver', $id);
+            // Combine the received and sent messages
+            $conversationMessages = $userReceivedMessages->concat($userSentMessages)
                 ->sortBy('created_at')->values();
     
             // Create the conversation array
             $conversation = [
-                'idReceiver' => $senderId,
-                'receiver_name' => $sender->name,
-                'receiver_email' => $sender->email,
-                'messages' => $conversationMessages->map(function ($message) use ($user, $sender) {
-                    $senderName = ($message->idSender == $user->id) ? $user->name : $sender->name;
+                'idReceiver' => $id,
+                'receiver_name' => $otherUser->name,
+                'receiver_pseudo' => $otherUser->pseudo,
+                'receiver_pp' => $otherUser->extra_user->pp ?? null ,
+                'messages' => $conversationMessages->map(function ($message) use ($user, $otherUser) {
+                    $senderName = ($message->idSender == $user->id) ? $user->name : $otherUser->name;
                     return [
                         'idMessage' => $message->idMessage,
                         'idSender' => $message->idSender,
@@ -82,7 +88,6 @@ class MessageCotroller extends Controller
     
         return response()->json($messages);
     }
-    
     
     
 
