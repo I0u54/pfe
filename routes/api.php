@@ -17,6 +17,7 @@ use App\Http\Controllers\MessageCotroller;
 
 use App\Http\Controllers\TestController ;
 use App\Http\Controllers\SettingsController ;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('/tweets/createVideo',[TweetsController::class,'createVideo']);
     Route::put('/tweets/updateTweet/{id}',[TweetsController::class,'updateTweet']);
     Route::delete('/tweets/deleteTweet/{id}',[TweetsController::class,'deleteTweet']);
+    Route::get('tweetsProtected/{slug}',[ProfilController::class,'getTweetsProtected']);
 
     Route::get('likedTweets/{slug}',[ProfilController::class,'likedTweets']);
     Route::get('bookmarks/{slug}' ,[ProfilController::class,'bookmarks'] );
@@ -84,6 +86,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('comments/create/{idTweet}',[CommentController::class,'CreateComment']);
     Route::put('comments/update/{id}',[CommentController::class,'updateComment']);
     Route::delete('/comments/delete/{id}',[CommentController::class,'destroyComment']);
+   
 
     //replyComment
     Route::post('replies/create/{idComment}',[RepliesController::class,'createReply']);
@@ -91,7 +94,6 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::delete('replies/delete/{id}',[RepliesController::class,'destroyReply']);
     Route::get('replies/{idComment}',[RepliesController::class,'getReplies']);
 
-    
 
     
 });
@@ -110,10 +112,12 @@ Route::get('/SocialLogin/{social}',[AuthController::class , 'redirectToprovider'
 Route::get('/SocialLogin/{social}/callback', [AuthController::class , 'callback']);
 
 Route::get('profile/{slug}',[ProfilController::class,'index']);
-Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
+
 Route::get('tweet/{id}',[TweetsController::class,'getTweet']);
 Route::get('followers/{slug}',[ProfilController::class,'followers']);
 Route::get('followings/{slug}',[ProfilController::class,'followings']);
+
+Route::get('tweets/{slug}',[ProfilController::class,'getTweets']);
 
 
 

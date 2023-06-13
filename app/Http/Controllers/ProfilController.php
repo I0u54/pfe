@@ -11,7 +11,12 @@ use App\Http\Resources\profile\Follower as RcFollower;
 use App\Http\Resources\profile\Following as RcFollowing;
 use App\Http\Resources\profile\Likes as RcLikes ;
 use App\Http\Resources\profile\Bookmarks as RcBookmarks;
+use App\Models\Like;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
+
 
 class ProfilController extends Controller
 
@@ -46,26 +51,80 @@ class ProfilController extends Controller
             return $this->error([],'user not found',404);
         }
         $tweets = Tweet::where('users.pseudo',$slug)
-        ->select('tweets.idUser','tweets.id','description','image','video','tweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
+        ->select('tweets.idUser','tweets.id','description','image','video','tweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp',DB::raw('count(retweets.id) as retweet_count'))
         ->leftJoin('likes','likes.idTweet','=','tweets.id')
         ->leftJoin('comments','comments.idTweet','=','tweets.id')
         ->join('users','users.id','=','tweets.idUser')
         ->leftJoin('extar_users','extar_users.idUser','=','users.id')
+        ->leftJoin('retweets','retweets.idTweet','=','tweets.id')
+        
         ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'name', 'pseudo', 'email','pp')
       
         ->get();
+        
          
-        $retweets = Tweet::where('retweets.idUser',User::where('pseudo',$slug)->select('id')->first()->id)
-        ->join('retweets','retweets.idTweet','=','tweets.id')
-        ->select('tweets.idUser','retweets.idUser as orginaUserId','tweets.id','description','image','video','retweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
-        ->join('users','users.id','=','tweets.idUser')
+        $retweets = Tweet::where('retweets.idUser', User::where('pseudo', $slug)->select('id')->first()->id)
+    ->select('tweets.idUser', 'retweets.idUser as orginaUserId', 'tweets.id', 'description', 'image', 'video', 'retweets.created_at', 'name', 'pseudo', 'email', DB::raw('count(likes.idLike) as likes'), DB::raw('count(comments.idComment) as comments'), 'pp')
+    ->join('retweets', 'retweets.idTweet', '=', 'tweets.id')
+    ->join('users', 'users.id', '=', 'tweets.idUser')
+    ->leftJoin('likes', 'likes.idTweet', '=', 'tweets.id')
+    ->leftJoin('comments', 'comments.idTweet', '=', 'tweets.id')
+    ->leftJoin('extar_users', 'extar_users.idUser', '=', 'users.id')
+    ->groupBy('tweets.idUser', 'retweets.idUser', 'tweets.id', 'description', 'image', 'video', 'retweets.created_at', 'name', 'pseudo', 'email', 'pp')
+    ->selectSub(function ($query) {
+        $query->from('retweets')
+            ->whereColumn('retweets.idTweet', 'tweets.id')
+            ->selectRaw('count(*)');
+    }, 'retweet_count')
+    ->get();
+
+    
+        $allTweets = $tweets->merge($retweets);
+
+        $allTweets = $allTweets->sortByDesc('created_at')->values();
+        return $this->success($allTweets,'tweets shiped');
+        
+    }
+    public function getTweetsProtected($slug){
+        if(!User::where('pseudo',$slug)->first()){
+            return $this->error([],'user not found',404);
+        }
+        $tweets = Tweet::where('users.pseudo',$slug)
+        ->select('tweets.idUser','tweets.id','description','image','video','tweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp',DB::raw('count(retweets.id) as retweet_count'))
         ->leftJoin('likes','likes.idTweet','=','tweets.id')
         ->leftJoin('comments','comments.idTweet','=','tweets.id')
+        ->join('users','users.id','=','tweets.idUser')
         ->leftJoin('extar_users','extar_users.idUser','=','users.id')
-     
-        ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'retweets.created_at', 'name', 'pseudo', 'email','pp','retweets.idUser')
+        ->leftJoin('retweets','retweets.idTweet','=','tweets.id')
+        
+        ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'name', 'pseudo', 'email','pp')
       
         ->get();
+        foreach($tweets as $tweet){
+            $tweet->liked = Like::where('idUser',Auth::user()->id)->where('idTweet',$tweet->id)->first() != null ? true : false;
+        }
+        
+        
+         
+    $retweets = Tweet::where('retweets.idUser', User::where('pseudo', $slug)->select('id')->first()->id)
+    ->select('tweets.idUser', 'retweets.idUser as orginaUserId', 'tweets.id', 'description', 'image', 'video', 'retweets.created_at', 'name', 'pseudo', 'email', DB::raw('count(likes.idLike) as likes'), DB::raw('count(comments.idComment) as comments'), 'pp')
+    ->join('retweets', 'retweets.idTweet', '=', 'tweets.id')
+    ->join('users', 'users.id', '=', 'tweets.idUser')
+    ->leftJoin('likes', 'likes.idTweet', '=', 'tweets.id')
+    ->leftJoin('comments', 'comments.idTweet', '=', 'tweets.id')
+    ->leftJoin('extar_users', 'extar_users.idUser', '=', 'users.id')
+    ->groupBy('tweets.idUser', 'retweets.idUser', 'tweets.id', 'description', 'image', 'video', 'retweets.created_at', 'name', 'pseudo', 'email', 'pp')
+    ->selectSub(function ($query) {
+        $query->from('retweets')
+            ->whereColumn('retweets.idTweet', 'tweets.id')
+            ->selectRaw('count(*)');
+    }, 'retweet_count')
+    ->get();
+    foreach($retweets as $tweet){
+        $tweet->liked = Like::where('idUser',Auth::user()->id)->where('idTweet',$tweet->id)->first() != null ? true : false;
+    }
+
+    
         $allTweets = $tweets->merge($retweets);
 
         $allTweets = $allTweets->sortByDesc('created_at')->values();
