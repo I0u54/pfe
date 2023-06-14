@@ -93,11 +93,13 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::put('replies/update/{id}',[RepliesController::class,'updateReply']);
     Route::delete('replies/delete/{id}',[RepliesController::class,'destroyReply']);
     Route::get('replies/{idComment}',[RepliesController::class,'getReplies']);
+    
+    Route::get('/trends/{hashtag}',[HomeController::class ,'getTweetsByHashtag']);
 
 
     
 });
-Route::get('/trends/{hashtag}',[HomeController::class ,'getTweetsByHashtag']);
+
 Route::get('/trends',[HomeController::class , 'getTrends']);
     
 Route::post('/verifyEmail',[AuthController::class,'verifyEmail']);
