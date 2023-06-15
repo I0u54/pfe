@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\Home as RcHome ;
 
 use App\Http\Resources\Users_To_Follow;
+use App\Models\Like;
 use App\Models\Tweet;
 use App\Traits\HttpResponses;
 use App\Models\User ;
@@ -97,15 +98,25 @@ class HomeController extends Controller
     public function getTweetsByHashtag($hashtag)
     {
         $tweets = Tweet::where('description', 'like', '%#' . $hashtag . '%')
-        ->select('tweets.idUser','tweets.id','description','image','video','tweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp')
+        ->select('tweets.idUser','tweets.id','description','image','video','tweets.created_at','name','pseudo','email',DB::raw('count(likes.idLike) as likes'),DB::raw('count(comments.idComment) as comments'),'pp',DB::raw('count(retweets.id) as retweet_count'))
         ->leftJoin('likes','likes.idTweet','=','tweets.id')
         ->leftJoin('comments','comments.idTweet','=','tweets.id')
         ->join('users','users.id','=','tweets.idUser')
         ->leftJoin('extar_users','extar_users.idUser','=','users.id')
-        ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'name', 'pseudo', 'email','pp')->get();
+        ->leftJoin('retweets','retweets.idTweet','=','tweets.id')
+        
+        ->groupBy('tweets.idUser', 'tweets.id', 'description', 'image', 'video', 'tweets.created_at', 'name', 'pseudo', 'email','pp')
+      
+        ->get();
+        foreach($tweets as $tweet){
+            $tweet->liked = Like::where('idUser',Auth::user()->id)->where('idTweet',$tweet->id)->first() != null ? true : false;
+        }
+        
+        
     
         return $this->success($tweets,'hashtags fetched with success');
     }
+    
 
     public function Who_to_follow(){
         $user = Auth::user();
