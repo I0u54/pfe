@@ -16,7 +16,9 @@ class TestController extends Controller
         // $user = Tweet::find(1)->with('tweet_user')->first()->only('tweet_user');
         // $user = User::find(4);
         // return $this->success($user , 'ok'); ;
-        $user = User::where('id' , Auth::user()->id)->with('extra_user')->first() ;
+        $user = User::selectRaw('*  , datediff(now() ,created_at) as diff')->with('like' , function($q){
+            $q->selectRaw('*');
+        })->get() ;
         return $user ;
        
  

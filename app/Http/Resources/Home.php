@@ -65,6 +65,7 @@ class Home extends JsonResource
                 'originalUserId' =>$tweet->tweet_retweet->tweet_user->id ,
                 'originalUserName' =>$tweet->tweet_retweet->tweet_user->name ,
                 'originalUserPseudo' => $tweet->tweet_retweet->tweet_user->pseudo ,
+                'id' => $tweet->tweet_retweet->id,
                 'originalUserPP' =>  $tweet->tweet_retweet->tweet_user->extra_user->pp ?? null ,
                 'created_at' => $tweet->created_at         
 
